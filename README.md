@@ -4,12 +4,12 @@ The Drilldown Package provides an easy-to-use solution for creating animated, hi
 
 ## Table of Contents
 
-- [Features](#features)
-- [Dependencies](#dependencies)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API](#api)
-- [Release Notes](#release-notes)
+- [Features](#markdown-header-features)
+- [Dependencies](#markdown-header-dependencies)
+- [Installation](#markdown-header-installation)
+- [Usage](#markdown-header-usage)
+- [API](#markdown-header-api)
+- [Release Notes](#markdown-header-release-notes)
 
 ## Features
 
