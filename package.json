@@ -1,0 +1,16 @@
+{
+  "name": "drilldown",
+  "version": "1.0.0",
+  "description": "A package to create a menu system enabling you to drilldown to deeper levels and navigate back up",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/numiko/drilldown.git"
+  },
+  "author": "Numiko",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/numiko/drilldown#readme"
+}
