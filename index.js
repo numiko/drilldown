@@ -189,9 +189,9 @@ export class Drilldown {
    */
   getElementsToHideForMenuTransition(menu) {
     const menuItemLinks = menu.querySelectorAll(`:scope > ul > ${this.options.itemSelector} > [data-js-menu-link]`);
-    const backButtons = menu.querySelectorAll(`${this.options.backSelector}`);
+    const backButton = menu.querySelector(`${this.options.backSelector}`);
     const parentLink = menu.querySelector('[data-js-menu-parent]');
-    const combinedMenuItems = [...menuItemLinks, ...backButtons, parentLink];
+    const combinedMenuItems = [backButton, parentLink, ...menuItemLinks];
 
     return combinedMenuItems;
   }
