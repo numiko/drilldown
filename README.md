@@ -103,10 +103,10 @@ Customizable options and their defaults are as follows:
 | `nextSelector` | Selector for next buttons. | `string` | `[data-js-menu-link-has-submenu]` |
 | `submenuSelector` | Selector for submenu containers. | `string` | `[data-js-menu-container]` |
 | `itemSelector` | Selector for menu items. | `string` | `[data-js-menu-item]` |
-| `childTween` | Configuration object to customize the tween for a child menu.  See customizing tween | `object` | `null`
-| `parentTween` | Configuration object to customize the tween for a parent menu. See customizing tween | `object` | `null`
+| `childTween` | Configuration object to customize the tween for a child menu.  See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
+| `parentTween` | Configuration object to customize the tween for a parent menu. See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
 
-### Customizing Tween
+#### Customizing Tween
 
 Both the `childTween` and `parentTween` objects take the same customization options listed below
 
