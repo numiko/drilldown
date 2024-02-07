@@ -103,11 +103,63 @@ Customizable options and their defaults are as follows:
 | `nextSelector` | Selector for next buttons. | `string` | `[data-js-menu-link-has-submenu]` |
 | `submenuSelector` | Selector for submenu containers. | `string` | `[data-js-menu-container]` |
 | `itemSelector` | Selector for menu items. | `string` | `[data-js-menu-item]` |
-| `onChildTweenStart` | Callback functions before sub menu animation. | `function` | `null` |
-| `onChildTweenComplete` | Callback functions after sub menu animation. | `function` | `null` |
-| `onParentTweenStart` | Callback functions before parent menu animation. | `function` | `null` |
-| `onParentTweenComplete` | Callback functions after parent menu animation. | `function` | `null` |
+| `childTween` | Configuration object to customize the tween for a child menu.  See customizing tween | `object` | `null`
+| `parentTween` | Configuration object to customize the tween for a parent menu. See customizing tween | `object` | `null`
 
+### Customizing Tween
+
+Both the `childTween` and `parentTween` objects take the same customization options listed below
+
+| Option | Description | Type | Default
+| --- | --- | --- | --- |
+| `outDuration` | The tween duration when animating the current menu out | `function`  | `0.2`
+| `outEase` | The tween ease when animating the current menu out | `function`  | `'power1.out'`
+| `outStagger` | The tween stagger when animating the current menu out | `number` | `0` |
+| `inDuration` | The tween duration when animating the new menu in | `number` | `0.2` |
+| `inEase` | The tween ease when animating the new menu in | `string` | `'power1.out'` |
+| `inStagger` | The tween stagger when animating the new menu in | `number` | `0.1` |
+| `heightDuration` | The tween duration when animating the height of the drilldown menu | `number` | `0.3` |
+| `heightEase` | The tween ease when animating the height of the drilldown menu | `string` | `'power1.out'` |
+| `onStart` | Function to be called when the animation starts | `function` | `null` |
+| `onComplete` | Function to be called when the animation completes | `function` | `null` |
+
+#### Example
+```JS
+const drilldownInstance = new Drilldown(context, {
+  // tween specific options
+  childTween: {
+    outDuration: 0.2,
+    outEase: 'power1.out',
+    outStagger: 0,
+    inDuration: 0.2,
+    inEase: 'power1.out',
+    inStagger: 0.1,
+    heightDuration: 0.3,
+    heightEase: 'power1.out',
+    onStart: () => {
+      console.log('current menu exiting');
+    },
+    onComplete: () => {
+      console.log('child menu entered');
+    }
+  },
+  parentTween: {
+    outDuration: 0.2,
+    outEase: 'power1.out',
+    outStagger: 0,
+    inDuration: 0.2,
+    inEase: 'power1.out',
+    inStagger: 0.1,
+    heightDuration: 0.3,
+    heightEase: 'power1.out',
+    onStart: () => {
+      console.log('current menu exiting');
+    },
+    onComplete: () => {
+      console.log('parent menu entered');
+    }
+  }
+```
 ### Methods
 
 | Method | Description
