@@ -1,5 +1,8 @@
 import { gsap } from '@node_modules/gsap';
 
+const DEFAULT_DURATION = 0.2;
+const DEFAULT_EASE = 'power1.out';
+
 export class Drilldown {
   /**
    * Initializes a new instance of the Drilldown class.
@@ -19,6 +22,28 @@ export class Drilldown {
       onChildTweenComplete: options.onChildTweenComplete || null,
       onParentTweenStart: options.onParentTweenStart || null,
       onParentTweenComplete: options.onParentTweenComplete || null,
+
+      childTween: {
+        outDuration: options.childTween?.outDuration || DEFAULT_DURATION,
+        outEase: options.childTween?.outEase || DEFAULT_EASE,
+        outStagger: options.childTween?.outStagger || 0,
+        inDuration: options.childTween?.inDuration || DEFAULT_DURATION,
+        inEase: options.childTween?.inEase || DEFAULT_EASE,
+        inStagger: options.childTween?.inStagger || 0,
+        heightDuration: options.childTween?.heightDuration || DEFAULT_DURATION,
+        heightEase: options.childTween?.heightEase || DEFAULT_EASE
+      },
+      parentTween: {
+        outDuration: options.parentTween?.outDuration || DEFAULT_DURATION,
+        outEase: options.parentTween?.outEase || DEFAULT_EASE,
+        outStagger: options.parentTween?.outStagger || 0,
+        inDuration: options.parentTween?.inDuration || DEFAULT_DURATION,
+        inEase: options.parentTween?.inEase || DEFAULT_EASE,
+        inStagger: options.parentTween?.inStagger || 0,
+        heightDuration: options.parentTween?.heightDuration || DEFAULT_DURATION,
+        heightEase: options.parentTween?.heightEase|| DEFAULT_EASE,
+      }
+
     };
     /**
      * A list containing all submenus within the current
@@ -70,7 +95,6 @@ export class Drilldown {
    */
   handleMenuClick(e) {
     if (this.isAnimating || this.disableNavigation) return;
-
     const target = e.target.closest(this.options.nextSelector) || e.target.closest(this.options.backSelector);
     if (!target) return;
 
@@ -326,13 +350,16 @@ export class Drilldown {
     tl.to(currentMenuItems, {
       autoAlpha: 0,
       x: -20,
-      duration: 0.2,
+      duration: this.options.childTween.outDuration,
+      ease: this.options.childTween.outEase,
+      stagger: this.options.childTween.outStagger,
     });
 
     tl.to(this.context, {
       height: `${submenuHeight}px`,
-      duration: 0.2
-    }, 0);
+      duration: this.options.childTween.heightDuration,
+      ease: this.options.childTween.heightEase,
+    });
 
     tl.set(targetMenu, {
       autoAlpha: 1,
@@ -344,7 +371,9 @@ export class Drilldown {
     }, {
       autoAlpha: 1,
       x: 0,
-      duration: 0.2
+      duration: this.options.childTween.inDuration,
+      ease: this.options.childTween.inEase,
+      stagger: this.options.childTween.inStagger,
     });
 
     return tl;
@@ -363,6 +392,14 @@ export class Drilldown {
 
     const tl = new gsap.timeline();
 
+    tl.to(currentMenuItems, {
+      x: 20,
+      autoAlpha: 0,
+      duration: this.options.parentTween.outDuration,
+      ease: this.options.parentTween.outEase,
+      stagger: this.options.parentTween.outStagger,
+    });
+
     tl.to(this.context, {
       // This is calculated at runtime because the height of the parent menu changes
       // just before we animate it in: see the 'onShowParentStart' callback.
@@ -372,24 +409,20 @@ export class Drilldown {
         const naturalHeight = this.getNaturalHeight(targetMenu);
         return `${naturalHeight}px`;
       },
-      duration: 0.3,
-    }, 0);
+      duration: this.options.parentTween.heightDuration,
+      ease: this.options.parentTween.heightEase,
+    });
 
-    tl.to(currentMenu, {
+    tl.set(currentMenu, {
       autoAlpha: 0,
-      duration: 0.2,
-    }, 0);
-
-    tl.to(currentMenuItems, {
-      x: 20,
-      autoAlpha: 0,
-      duration: 0.2,
-    }, 0);
+    });
 
     tl.to(parentMenuItems, {
       autoAlpha: 1,
       x: 0,
-      duration: 0.2,
+      duration: this.options.parentTween.inDuration,
+      ease: this.options.parentTween.inEase,
+      stagger: this.options.parentTween.inStagger,
     });
 
     return tl;
