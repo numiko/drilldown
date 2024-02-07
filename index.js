@@ -12,7 +12,7 @@ export class Drilldown {
     this.context = context;
     this.options = {
       backSelector: options.backSelector || '[data-js-menu-back]',
-      nextSelector: options.nextSelector || '[data-js-menu-link-has-submenu]',
+      nextSelector: options.nextSelector || '[data-js-menu-next]',
       submenuSelector: options.submenuSelector || '[data-js-menu-container]',
       itemSelector: options.itemSelector || '[data-js-menu-item]',
       onChildTweenStart: options.onChildTweenStart || null,
