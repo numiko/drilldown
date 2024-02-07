@@ -18,11 +18,6 @@ export class Drilldown {
       nextSelector: options.nextSelector || '[data-js-menu-next]',
       submenuSelector: options.submenuSelector || '[data-js-menu-container]',
       itemSelector: options.itemSelector || '[data-js-menu-item]',
-      onChildTweenStart: options.onChildTweenStart || null,
-      onChildTweenComplete: options.onChildTweenComplete || null,
-      onParentTweenStart: options.onParentTweenStart || null,
-      onParentTweenComplete: options.onParentTweenComplete || null,
-
       childTween: {
         outDuration: options.childTween?.outDuration || DEFAULT_DURATION,
         outEase: options.childTween?.outEase || DEFAULT_EASE,
@@ -31,7 +26,9 @@ export class Drilldown {
         inEase: options.childTween?.inEase || DEFAULT_EASE,
         inStagger: options.childTween?.inStagger || 0,
         heightDuration: options.childTween?.heightDuration || DEFAULT_DURATION,
-        heightEase: options.childTween?.heightEase || DEFAULT_EASE
+        heightEase: options.childTween?.heightEase || DEFAULT_EASE,
+        onStart: options.childTween?.onStart || null,
+        onComplete: options.childTween?.onComplete || null,
       },
       parentTween: {
         outDuration: options.parentTween?.outDuration || DEFAULT_DURATION,
@@ -42,6 +39,8 @@ export class Drilldown {
         inStagger: options.parentTween?.inStagger || 0,
         heightDuration: options.parentTween?.heightDuration || DEFAULT_DURATION,
         heightEase: options.parentTween?.heightEase|| DEFAULT_EASE,
+        onStart: options.parentTween?.onStart || null,
+        onComplete: options.parentTween?.onComplete || null,
       }
 
     };
@@ -160,18 +159,17 @@ export class Drilldown {
    * @param {boolean} isChild - Flag to determine if the animation is for showing a child menu (true) or a parent menu (false).
    */
   setupTweenCallbacks(tween, currentMenu, targetMenu, isChild) {
-    const startCallback = isChild ? 'onChildTweenStart' : 'onParentTweenStart';
-    const completeCallback = isChild ? 'onChildTweenComplete' : 'onParentTweenComplete';
+    const tweenOptions = isChild ? this.options.childTween : this.options.parentTween;
     const onShowStart = isChild ? this.onShowChildStart : this.onShowParentStart;
     const onShowComplete = isChild ? this.onShowChildComplete : this.onShowParentComplete;
 
     tween.eventCallback('onStart', () => {
-      this.options[startCallback]?.(currentMenu, targetMenu);
+      if (tweenOptions.onStart) tweenOptions.onStart(currentMenu, targetMenu);
       onShowStart(currentMenu, targetMenu);
     });
 
     tween.eventCallback('onComplete', () => {
-      this.options[completeCallback]?.(currentMenu, targetMenu);
+      if (tweenOptions.onComplete) tweenOptions.onComplete(currentMenu, targetMenu);
       onShowComplete(currentMenu, targetMenu);
     });
   }
