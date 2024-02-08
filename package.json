@@ -12,5 +12,8 @@
   },
   "author": "Numiko",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/numiko/drilldown#readme"
+  "homepage": "https://bitbucket.org/numiko/drilldown#readme",
+  "dependencies": {
+    "gsap": "^3.12.5"
+  }
 }
