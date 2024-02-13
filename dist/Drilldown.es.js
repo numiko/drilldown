@@ -41,7 +41,7 @@ class R {
         stagger: this.options.parentTween.inStagger
       }), s;
     });
-    var i, n, s, o, l, u, m, p, S, g, d, w, T, b, f, v, C, E, I, x;
+    var i, n, s, o, l, u, m, p, g, S, d, w, T, b, f, v, C, E, I, x;
     this.bindThisToMemberFunctions(), this.context = t, this.options = {
       backSelector: e.backSelector || "[data-js-menu-back]",
       nextSelector: e.nextSelector || "[data-js-menu-next]",
@@ -56,8 +56,8 @@ class R {
         inStagger: ((u = e.childTween) == null ? void 0 : u.inStagger) || 0,
         heightDuration: ((m = e.childTween) == null ? void 0 : m.heightDuration) || a,
         heightEase: ((p = e.childTween) == null ? void 0 : p.heightEase) || h,
-        onStart: ((S = e.childTween) == null ? void 0 : S.onStart) || null,
-        onComplete: ((g = e.childTween) == null ? void 0 : g.onComplete) || null
+        onStart: ((g = e.childTween) == null ? void 0 : g.onStart) || null,
+        onComplete: ((S = e.childTween) == null ? void 0 : S.onComplete) || null
       },
       parentTween: {
         outDuration: ((d = e.parentTween) == null ? void 0 : d.outDuration) || a,
@@ -71,7 +71,7 @@ class R {
         onStart: ((I = e.parentTween) == null ? void 0 : I.onStart) || null,
         onComplete: ((x = e.parentTween) == null ? void 0 : x.onComplete) || null
       }
-    }, this.submenus = t.querySelectorAll(this.options.submenuSelector), this.disableNavigation = !1, this.activeMenuItem = null, this.menuResizeObserver = null;
+    }, this.disableNavigation = !1, this.activeMenuItem = null, this.menuResizeObserver = null;
   }
   /**
    * Binds instance to member functions to preserve the `this` context.
