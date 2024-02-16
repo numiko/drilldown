@@ -2,17 +2,32 @@
   "name": "@numiko/drilldown",
   "version": "1.0.0",
   "description": "A package to create a menu system enabling you to drilldown to deeper levels and navigate back up",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "author": "Numiko",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/numiko/drilldown#readme",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/numiko/drilldown.git"
   },
-  "author": "Numiko",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/numiko/drilldown#readme",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "main": "./dist/Drilldown.js",
+  "exports": {
+    ".": {
+      "import": "./dist/Drilldown.es.js",
+      "require": "./dist/Drilldown.umd.js"
+    }
+  },
+  "devDependencies": {
+    "vite": "^5.0.8",
+    "vitest": "^1.2.2",
+    "happy-dom": "^13.3.8"
+  },
   "dependencies": {
     "gsap": "^3.12.5"
   }
