@@ -3,7 +3,10 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   test: {
-    environment: 'happy-dom'
+    environment: 'happy-dom',
+    coverage: {
+      include: ['lib/']
+    }
   },
   build: {
     lib: {
