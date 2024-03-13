@@ -4,10 +4,14 @@ import path from 'path';
 import { expect, describe, it, vi, beforeEach } from 'vitest'
 import { Drilldown } from '../lib/Drilldown';
 
+async function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Read the HTML document content
 const htmlDocumentContent = fs.readFileSync(path.join(process.cwd(), 'index.html')).toString();
 
-// Initalise Happy DOM
+// Initialise Happy DOM
 const window = new Window();
 const document = window.document;
 
@@ -16,14 +20,14 @@ global.window = window;
 global.document = document;
 
 /**
- * Make sure the coument is in a clear state before each test
+ * Make sure the document is in a clear state before each test
  */
 beforeEach(() => {
   document.body.innerHTML = "";
   document.write(htmlDocumentContent);
 })
 
-describe('Drilldown Menu Tests', () => {
+describe('Drilldown initialisation', () => {
   let drilldown;
   const DEFAULT_DURATION = 0.2;
   const DEFAULT_EASE = 'power1.out';
@@ -51,7 +55,33 @@ describe('Drilldown Menu Tests', () => {
     expect(drilldown.options.parentTween.outStagger).toBe(DEFAULT_STAGGER);
     // Add more assertions for other default options and initial state
   });
+})
 
+describe('Interacting with the menu', () => {
+  it('should reveal a submenu when a link is clicked that has a submenu', async () => {
+    const menu = document.getElementById('menu');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      },
+    });
+    drilldown.init();
 
-  // Add more tests for animations, event listeners, resize observer, reset, and destroy methods
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+    const submenuWrapper = document.querySelector('[data-js-menu-container-level="1"]');
+    const submenuLinks = document.querySelectorAll('[data-js-menu-link-level="1"]');
+
+    linkWithSubmenu.click();
+
+    await delay(250);
+
+    expect(submenuWrapper.style.opacity).toBe('1');
+    expect(submenuWrapper.style.visibility).toBe('inherit');
+
+    submenuLinks.forEach((link) => {
+      expect(link.style.opacity).toBe('1');
+      expect(link.style.visibility).toBe('inherit');
+    });
+  });
 });
