@@ -1,7 +1,7 @@
 import { Window } from 'happy-dom';
 import fs from 'fs';
 import path from 'path';
-import { expect, describe, it, beforeEach } from 'vitest'
+import { expect, describe, it, vi, beforeEach } from 'vitest'
 import { Drilldown } from '../lib/Drilldown';
 
 async function delay(ms) {
@@ -83,5 +83,117 @@ describe('Interacting with the menu', () => {
       expect(link.style.opacity).toBe('1');
       expect(link.style.visibility).toBe('inherit');
     });
+  });
+});
+
+describe('When callbacks are utilised', () => {
+  it('should call the onStart callback when a submenu is opened', async () => {
+    const onStartCallback = vi.fn();
+    const menu = document.getElementById('menu');
+    const submenuToBeRevealed = document.querySelector('[data-js-menu-container-level="1"]');
+    const topLevelMenu = document.querySelector('[data-js-menu-container-level="0"]');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+        onStart: onStartCallback
+      },
+    });
+    drilldown.init();
+
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+    linkWithSubmenu.click();
+
+    await delay(250);
+
+    expect(onStartCallback).toHaveBeenCalled();
+    expect(onStartCallback).toHaveBeenCalledWith(topLevelMenu, submenuToBeRevealed);
+  });
+
+  it('should call the onComplete callback when a submenu has finished opening', async () => {
+    const onCompleteCallback = vi.fn();
+    const menu = document.getElementById('menu');
+    const submenuToBeRevealed = document.querySelector('[data-js-menu-container-level="1"]');
+    const topLevelMenu = document.querySelector('[data-js-menu-container-level="0"]');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+        onComplete: onCompleteCallback
+      },
+    });
+    drilldown.init();
+
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+    linkWithSubmenu.click();
+
+    await delay(250);
+
+    expect(onCompleteCallback).toHaveBeenCalled();
+    expect(onCompleteCallback).toHaveBeenCalledWith(topLevelMenu, submenuToBeRevealed);
+  });
+
+  it('should call the onStart callback when going back up a level', async () => {
+    const onStartCallback = vi.fn();
+    const menu = document.getElementById('menu');
+    const submenuToBeRevealed = document.querySelector('[data-js-menu-container-level="1"]');
+    const topLevelMenu = document.querySelector('[data-js-menu-container-level="0"]');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      },
+      parentTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+        onStart: onStartCallback
+      }
+    });
+    drilldown.init();
+
+    // Open the submenu.
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+    linkWithSubmenu.click();
+    await delay(250);
+
+    // Navigate back to top-level menu.
+    const backLink = document.querySelector('[data-js-menu-back]');
+    backLink.click();
+    await delay(250);
+
+    expect(onStartCallback).toHaveBeenCalled();
+    expect(onStartCallback).toHaveBeenCalledWith(submenuToBeRevealed, topLevelMenu);
+  });
+
+  it('should call the onComplete callback after going back up a level', async () => {
+    const onCompleteCallback = vi.fn();
+    const menu = document.getElementById('menu');
+    const submenuToBeRevealed = document.querySelector('[data-js-menu-container-level="1"]');
+    const topLevelMenu = document.querySelector('[data-js-menu-container-level="0"]');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      },
+      parentTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+        onComplete: onCompleteCallback
+      }
+    });
+    drilldown.init();
+
+    // Open the submenu.
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+    linkWithSubmenu.click();
+    await delay(250);
+
+    // Navigate back to top-level menu.
+    const backLink = document.querySelector('[data-js-menu-back]');
+    backLink.click();
+    await delay(250);
+
+    expect(onCompleteCallback).toHaveBeenCalled();
+    expect(onCompleteCallback).toHaveBeenCalledWith(submenuToBeRevealed, topLevelMenu);
   });
 });
