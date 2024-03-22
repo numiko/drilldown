@@ -196,4 +196,18 @@ describe('When callbacks are utilised', () => {
     expect(onCompleteCallback).toHaveBeenCalled();
     expect(onCompleteCallback).toHaveBeenCalledWith(submenuToBeRevealed, topLevelMenu);
   });
+
+  it('should call the user-defined reset callback when the module is reset', async () => {
+    const onReset = vi.fn();
+    const menu = document.getElementById('menu');
+    const drilldown = new Drilldown(menu, {
+      onReset
+    });
+    drilldown.init();
+
+    drilldown.reset();
+
+    await delay(250);
+    expect(onReset).toHaveBeenCalled();
+  })
 });
