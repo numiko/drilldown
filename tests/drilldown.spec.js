@@ -84,6 +84,28 @@ describe('Interacting with the menu', () => {
       expect(link.style.visibility).toBe('inherit');
     });
   });
+
+  it('should remove inline styles of all children when reset', async () => {
+    const menu = document.getElementById('menu');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      },
+    });
+    drilldown.init();
+
+    const elementsInMenu = menu.querySelectorAll('*');
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+
+    linkWithSubmenu.click();
+    await delay(250);
+    drilldown.reset();
+
+    elementsInMenu.forEach((element) => {
+      expect(element.getAttribute('style')).toBe(null);
+    });
+  });
 });
 
 describe('When callbacks are utilised', () => {
