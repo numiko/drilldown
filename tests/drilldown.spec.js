@@ -1,7 +1,7 @@
 import { Window } from 'happy-dom';
 import fs from 'fs';
 import path from 'path';
-import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
+import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
 import { Drilldown } from '../lib/Drilldown';
 
 async function delay(ms) {
@@ -23,13 +23,13 @@ global.document = document;
  * Make sure the document is in a clear state before each test
  */
 beforeEach(() => {
-  document.body.innerHTML = "";
+  document.body.innerHTML = '';
   document.write(htmlDocumentContent);
-})
+});
 
 afterEach(() => {
   vi.restoreAllMocks();
-})
+});
 
 describe('Drilldown initialisation', () => {
   let drilldown;
@@ -59,7 +59,7 @@ describe('Drilldown initialisation', () => {
     expect(drilldown.options.parentTween.outStagger).toBe(DEFAULT_STAGGER);
     // Add more assertions for other default options and initial state
   });
-})
+});
 
 describe('Interacting with the menu', () => {
   it('should reveal a submenu when a link is clicked that has a submenu', async () => {
@@ -235,7 +235,7 @@ describe('When callbacks are utilised', () => {
 
     await delay(250);
     expect(onReset).toHaveBeenCalled();
-  })
+  });
 });
 
 describe('When the menu is resized', () => {
@@ -265,7 +265,7 @@ describe('When the menu is resized', () => {
         observe: vi.fn(),
         unobserve: vi.fn(),
         disconnect: vi.fn()
-      }
+      };
     });
 
     const menu = document.getElementById('menu');
@@ -288,6 +288,6 @@ describe('When the menu is resized', () => {
     // Allow time for the menu to open.
     await delay(250);
 
-    expect(menu.style.height).toBe(heightOfResizedMenu)
-  })
-})
+    expect(menu.style.height).toBe(heightOfResizedMenu);
+  });
+});
