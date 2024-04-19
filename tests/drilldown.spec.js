@@ -1,7 +1,7 @@
 import { Window } from 'happy-dom';
 import fs from 'fs';
 import path from 'path';
-import { expect, describe, it, vi, beforeEach } from 'vitest'
+import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest'
 import { Drilldown } from '../lib/Drilldown';
 
 async function delay(ms) {
@@ -25,6 +25,10 @@ global.document = document;
 beforeEach(() => {
   document.body.innerHTML = "";
   document.write(htmlDocumentContent);
+})
+
+afterEach(() => {
+  vi.restoreAllMocks();
 })
 
 describe('Drilldown initialisation', () => {
@@ -233,3 +237,57 @@ describe('When callbacks are utilised', () => {
     expect(onReset).toHaveBeenCalled();
   })
 });
+
+describe('When the menu is resized', () => {
+  it('should maintain the correct height', async () => {
+    /**
+    * The height we expect the menu to be when a resize event occurs.
+    * @type {string}
+    */
+    const heightOfResizedMenu = '400px';
+
+    // We mock the implementation of the Resize Observer because `happy-dom`, whilst
+    // mocking this itself, doesn't provide the necessary functionality to test the
+    // ResizeObserver callback.
+    vi.spyOn(global, 'ResizeObserver').mockImplementation((callback) => {
+      callback(
+        [
+          {
+            target: {
+              offsetHeight: parseInt(heightOfResizedMenu),
+            },
+          },
+        ],
+        this
+      );
+
+      return {
+        observe: vi.fn(),
+        unobserve: vi.fn(),
+        disconnect: vi.fn()
+      }
+    });
+
+    const menu = document.getElementById('menu');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      },
+      parentTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      }
+    });
+    drilldown.init();
+
+    // Open the submenu.
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+    linkWithSubmenu.click();
+
+    // Allow time for the menu to open.
+    await delay(250);
+
+    expect(menu.style.height).toBe(heightOfResizedMenu)
+  })
+})
