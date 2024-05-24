@@ -16,7 +16,12 @@
     "preview": "vite preview",
     "test": "vitest"
   },
-  "main": "./dist/Drilldown.js",
+  "main": "./dist/Drilldown.umd.js",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "import": "./dist/Drilldown.es.js",
