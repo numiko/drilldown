@@ -89,6 +89,52 @@ describe('Interacting with the menu', () => {
     });
   });
 
+  it('should reveal a the parent menu when a link is clicked that has a parent menu', async () => {
+    const menu = document.getElementById('menu');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      },
+      parentTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      },
+    });
+    drilldown.init();
+
+    // Open the submenu.
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+    linkWithSubmenu.click();
+
+    await delay(250);
+
+    // Go back up to the parent menu.
+    const backButton = document.querySelector('[data-js-menu-back]');
+    backButton.click();
+
+    await delay(250);
+
+    // All top-level links should be visible.
+    const topLevelLinks = document.querySelectorAll('[data-js-menu-link-level="0"]');
+    topLevelLinks.forEach((link) => {
+      expect(link.style.opacity).toBe('1');
+      expect(link.style.visibility).toBe('inherit');
+    });
+
+    // The submenu should be hidden.
+    const submenuWrapper = document.querySelector('[data-js-menu-container-level="1"]');
+    expect(submenuWrapper.style.opacity).toBe('0');
+    expect(submenuWrapper.style.visibility).toBe('hidden');
+
+    // The submenu links should be hidden.
+    const submenuLinks = document.querySelectorAll('[data-js-menu-link-level="1"]');
+    submenuLinks.forEach((link) => {
+      expect(link.style.opacity).toBe('0');
+      expect(link.style.visibility).toBe('hidden');
+    });
+  });
+
   it('should remove inline styles of all children when reset', async () => {
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
@@ -223,7 +269,7 @@ describe('When callbacks are utilised', () => {
     expect(onCompleteCallback).toHaveBeenCalledWith(submenuToBeRevealed, topLevelMenu);
   });
 
-  it('should call the user-defined reset callback when the module is reset', async () => {
+  it('should call the onReset callback when the menu is reset', async () => {
     const onReset = vi.fn();
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
