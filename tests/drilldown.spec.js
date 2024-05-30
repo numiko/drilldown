@@ -89,7 +89,7 @@ describe('Interacting with the menu', () => {
     });
   });
 
-  it('should reveal a the parent menu when a link is clicked that has a parent menu', async () => {
+  it('should reveal a parent menu when a link is clicked that has a parent menu', async () => {
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
       childTween: {
@@ -133,6 +133,28 @@ describe('Interacting with the menu', () => {
       expect(link.style.opacity).toBe('0');
       expect(link.style.visibility).toBe('hidden');
     });
+  });
+
+  it('should add a `hidden` class to parent `li` items when showing a child menu', async () => {
+    const menu = document.getElementById('menu');
+    const drilldown = new Drilldown(menu, {
+      childTween: {
+        inDuration: 0.01,
+        outDuration: 0.01,
+      }
+    });
+    drilldown.init();
+
+    // Open the submenu.
+    const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
+    linkWithSubmenu.click();
+
+    await delay(250);
+
+    // There are two parent menu items in the top-level menu. We want to make sure
+    // that the menu item that is not the currently-active item, has a class of `hidden`.
+    const nonActiveParentMenuItem = document.querySelector('[data-js-menu-item-level="0"]');
+    expect(nonActiveParentMenuItem.classList.contains('hidden')).toBe(true);
   });
 
   it('should remove inline styles of all children when reset', async () => {
