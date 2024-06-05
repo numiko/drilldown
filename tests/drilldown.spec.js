@@ -57,7 +57,21 @@ describe('Drilldown initialisation', () => {
     expect(drilldown.options.parentTween.inEase).toBe(DEFAULT_EASE);
     expect(drilldown.options.parentTween.inStagger).toBe(DEFAULT_STAGGER);
     expect(drilldown.options.parentTween.outStagger).toBe(DEFAULT_STAGGER);
-    // Add more assertions for other default options and initial state
+  });
+
+  it('should correctly initialize with custom selectors', () => {
+    const menuElement = document.getElementById('menu');
+    drilldown = new Drilldown(menuElement, {
+      backSelector: '[data-js-back-selector]',
+      nextSelector: '[data-js-next-selector]',
+      submenuSelector: '[data-js-submenu-selector]',
+      itemSelector: '[data-js-item-selector]',
+    });
+
+    expect(drilldown.options.backSelector).toBe('[data-js-back-selector]');
+    expect(drilldown.options.nextSelector).toBe('[data-js-next-selector]');
+    expect(drilldown.options.submenuSelector).toBe('[data-js-submenu-selector]');
+    expect(drilldown.options.itemSelector).toBe('[data-js-item-selector]');
   });
 });
 
