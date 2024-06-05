@@ -73,6 +73,34 @@ describe('Drilldown initialisation', () => {
     expect(drilldown.options.submenuSelector).toBe('[data-js-submenu-selector]');
     expect(drilldown.options.itemSelector).toBe('[data-js-item-selector]');
   });
+
+  it('should correctly initialize with custom childTween options', () => {
+    const menuElement = document.getElementById('menu');
+    const IN_DURATION = 0.5;
+    const OUT_DURATION = 0.5;
+    const IN_EASE = 'power2.in';
+    const OUT_EASE = 'power2.out';
+    const IN_STAGGER = 0.1;
+    const OUT_STAGGER = 0.1;
+
+    drilldown = new Drilldown(menuElement, {
+      childTween: {
+        inDuration: 0.5,
+        outDuration: 0.5,
+        inEase: 'power2.in',
+        outEase: 'power2.out',
+        inStagger: 0.1,
+        outStagger: 0.1,
+      },
+    });
+
+    expect(drilldown.options.childTween.outDuration).toBe(IN_DURATION);
+    expect(drilldown.options.childTween.inDuration).toBe(OUT_DURATION);
+    expect(drilldown.options.childTween.outEase).toBe(OUT_EASE);
+    expect(drilldown.options.childTween.inEase).toBe(IN_EASE);
+    expect(drilldown.options.childTween.inStagger).toBe(IN_STAGGER);
+    expect(drilldown.options.childTween.outStagger).toBe(OUT_STAGGER);
+  });
 });
 
 describe('Interacting with the menu', () => {
