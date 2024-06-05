@@ -101,6 +101,34 @@ describe('Drilldown initialisation', () => {
     expect(drilldown.options.childTween.inStagger).toBe(IN_STAGGER);
     expect(drilldown.options.childTween.outStagger).toBe(OUT_STAGGER);
   });
+
+  it('should correctly initialize with custom parentTween options', () => {
+    const menuElement = document.getElementById('menu');
+    const IN_DURATION = 0.5;
+    const OUT_DURATION = 0.5;
+    const IN_EASE = 'power2.in';
+    const OUT_EASE = 'power2.out';
+    const IN_STAGGER = 0.1;
+    const OUT_STAGGER = 0.1;
+
+    drilldown = new Drilldown(menuElement, {
+      parentTween: {
+        inDuration: 0.5,
+        outDuration: 0.5,
+        inEase: 'power2.in',
+        outEase: 'power2.out',
+        inStagger: 0.1,
+        outStagger: 0.1,
+      },
+    });
+
+    expect(drilldown.options.parentTween.outDuration).toBe(IN_DURATION);
+    expect(drilldown.options.parentTween.inDuration).toBe(OUT_DURATION);
+    expect(drilldown.options.parentTween.outEase).toBe(OUT_EASE);
+    expect(drilldown.options.parentTween.inEase).toBe(IN_EASE);
+    expect(drilldown.options.parentTween.inStagger).toBe(IN_STAGGER);
+    expect(drilldown.options.parentTween.outStagger).toBe(OUT_STAGGER);
+  });
 });
 
 describe('Interacting with the menu', () => {
