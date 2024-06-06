@@ -13,3 +13,8 @@ const options = {
 
 const menu = new Drilldown(menuElement, options);
 menu.init();
+
+
+setTimeout(() => {
+  menu.destroy();
+}, 5000);
