@@ -1,4 +1,4 @@
-import { Drilldown } from "../lib/Drilldown";
+import { Drilldown } from '../lib/Drilldown';
 
 /**
  * This file is used to run the package locally for development and testing purposes.
