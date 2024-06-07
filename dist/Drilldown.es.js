@@ -1,9 +1,9 @@
-var C = Object.defineProperty;
-var O = (r, t, e) => t in r ? C(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
-var A = (r, t, e) => (O(r, typeof t != "symbol" ? t + "" : t, e), e);
+var x = Object.defineProperty;
+var O = (r, t, e) => t in r ? x(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
+var M = (r, t, e) => (O(r, typeof t != "symbol" ? t + "" : t, e), e);
 import { gsap as u } from "gsap";
 const h = 0.2, l = "power1.out";
-class y {
+class C {
   /**
    * Initializes a new instance of the Drilldown class.
    * @param {HTMLElement} context - The element to initialize the drilldown on.
@@ -17,9 +17,9 @@ class y {
      * @param {HTMLElement} targetMenu - The parent menu to be displayed.
      * @returns {gsap.core.Timeline} The GSAP timeline for the animation.
      */
-    A(this, "onShowParentTween", (t, e) => {
-      const s = this.getElementsToHideForMenuTransition(e), n = this.getElementsToHideForMenuTransition(t), i = new u.timeline();
-      return i.to(n, {
+    M(this, "onShowParentTween", (t, e) => {
+      const n = this.getElementsToHideForMenuTransition(e), s = this.getElementsToHideForMenuTransition(t), i = new u.timeline();
+      return i.to(s, {
         x: 20,
         autoAlpha: 0,
         duration: this.options.parentTween.outDuration,
@@ -33,7 +33,7 @@ class y {
         ease: this.options.parentTween.heightEase
       }), i.set(t, {
         autoAlpha: 0
-      }), i.to(s, {
+      }), i.to(n, {
         autoAlpha: 1,
         x: 0,
         duration: this.options.parentTween.inDuration,
@@ -41,7 +41,7 @@ class y {
         stagger: this.options.parentTween.inStagger
       }), i;
     });
-    var s, n, i, o, a, c, m, g, p, d, w, T, S, b, f, v, E, I, x, M;
+    var n, s, i, o, a, c, m, g, p, w, T, d, S, b, f, v, E, I, A, y;
     this.bindThisToMemberFunctions(), this.context = t, this.options = {
       backSelector: e.backSelector || "[data-js-menu-back]",
       nextSelector: e.nextSelector || "[data-js-menu-next]",
@@ -49,8 +49,8 @@ class y {
       itemSelector: e.itemSelector || "[data-js-menu-item]",
       onReset: e.onReset || null,
       childTween: {
-        outDuration: ((s = e.childTween) == null ? void 0 : s.outDuration) || h,
-        outEase: ((n = e.childTween) == null ? void 0 : n.outEase) || l,
+        outDuration: ((n = e.childTween) == null ? void 0 : n.outDuration) || h,
+        outEase: ((s = e.childTween) == null ? void 0 : s.outEase) || l,
         outStagger: ((i = e.childTween) == null ? void 0 : i.outStagger) || 0,
         inDuration: ((o = e.childTween) == null ? void 0 : o.inDuration) || h,
         inEase: ((a = e.childTween) == null ? void 0 : a.inEase) || l,
@@ -58,19 +58,19 @@ class y {
         heightDuration: ((m = e.childTween) == null ? void 0 : m.heightDuration) || h,
         heightEase: ((g = e.childTween) == null ? void 0 : g.heightEase) || l,
         onStart: ((p = e.childTween) == null ? void 0 : p.onStart) || null,
-        onComplete: ((d = e.childTween) == null ? void 0 : d.onComplete) || null
+        onComplete: ((w = e.childTween) == null ? void 0 : w.onComplete) || null
       },
       parentTween: {
-        outDuration: ((w = e.parentTween) == null ? void 0 : w.outDuration) || h,
-        outEase: ((T = e.parentTween) == null ? void 0 : T.outEase) || l,
+        outDuration: ((T = e.parentTween) == null ? void 0 : T.outDuration) || h,
+        outEase: ((d = e.parentTween) == null ? void 0 : d.outEase) || l,
         outStagger: ((S = e.parentTween) == null ? void 0 : S.outStagger) || 0,
         inDuration: ((b = e.parentTween) == null ? void 0 : b.inDuration) || h,
         inEase: ((f = e.parentTween) == null ? void 0 : f.inEase) || l,
         inStagger: ((v = e.parentTween) == null ? void 0 : v.inStagger) || 0,
         heightDuration: ((E = e.parentTween) == null ? void 0 : E.heightDuration) || h,
         heightEase: ((I = e.parentTween) == null ? void 0 : I.heightEase) || l,
-        onStart: ((x = e.parentTween) == null ? void 0 : x.onStart) || null,
-        onComplete: ((M = e.parentTween) == null ? void 0 : M.onComplete) || null
+        onStart: ((A = e.parentTween) == null ? void 0 : A.onStart) || null,
+        onComplete: ((y = e.parentTween) == null ? void 0 : y.onComplete) || null
       }
     }, this.activeMenuItem = null, this.menuResizeObserver = null;
   }
@@ -101,10 +101,10 @@ class y {
     if (!e)
       return;
     t.preventDefault();
-    const s = !!e.closest(this.options.nextSelector), n = e.closest(this.options.submenuSelector), i = this.getTargetMenu(e, s);
+    const n = !!e.closest(this.options.nextSelector), s = e.closest(this.options.submenuSelector), i = this.getTargetMenu(e, n);
     if (!i)
       return;
-    const o = s ? this.createAnimation(n, i, !0) : this.createAnimation(n, i, !1);
+    const o = n ? this.createAnimation(s, i, !0) : this.createAnimation(s, i, !1);
     o == null || o.play();
   }
   /**
@@ -129,9 +129,9 @@ class y {
    * @param {boolean} isChild - Determines the type of animation to create; true for child menu, false for parent menu.
    * @returns {gsap.core.Timeline} The GSAP timeline instance for the created animation.
    */
-  createAnimation(t, e, s) {
-    const n = s ? this.onShowChildTween(t, e) : this.onShowParentTween(t, e);
-    return this.setupTweenCallbacks(n, t, e, s), n.pause(), n;
+  createAnimation(t, e, n) {
+    const s = n ? this.onShowChildTween(t, e) : this.onShowParentTween(t, e);
+    return this.setupTweenCallbacks(s, t, e, n), s.pause(), s;
   }
   /**
    * Sets up GSAP tween callbacks for menu animations. This method configures onStart and onComplete callbacks
@@ -143,12 +143,12 @@ class y {
    * @param {HTMLElement} targetMenu - The target menu element that is being transitioned to.
    * @param {boolean} isChild - Flag to determine if the animation is for showing a child menu (true) or a parent menu (false).
    */
-  setupTweenCallbacks(t, e, s, n) {
-    const i = n ? this.options.childTween : this.options.parentTween, o = n ? this.onShowChildStart : this.onShowParentStart, a = n ? this.onShowChildComplete : this.onShowParentComplete;
+  setupTweenCallbacks(t, e, n, s) {
+    const i = s ? this.options.childTween : this.options.parentTween, o = s ? this.onShowChildStart : this.onShowParentStart, a = s ? this.onShowChildComplete : this.onShowParentComplete;
     t.eventCallback("onStart", () => {
-      i.onStart && i.onStart(e, s), o(e, s);
+      i.onStart && i.onStart(e, n), o(e, n);
     }), t.eventCallback("onComplete", () => {
-      i.onComplete && i.onComplete(e, s), a(e, s);
+      i.onComplete && i.onComplete(e, n), a(e, n);
     });
   }
   /**
@@ -169,8 +169,8 @@ class y {
    * @returns {Array}
    */
   getMenuListItems(t) {
-    const e = Array.from(t.children).filter((n) => n.matches("ul"))[0];
-    return e ? Array.from(e.children).filter((n) => n.matches(this.options.itemSelector)) : [];
+    const e = Array.from(t.children).filter((s) => s.matches("ul"))[0];
+    return e ? Array.from(e.children).filter((s) => s.matches(this.options.itemSelector)) : [];
   }
   /**
    * Returns the elements that will be hidden when a menu is transitioning.
@@ -178,8 +178,8 @@ class y {
    * @returns {Array}
    */
   getElementsToHideForMenuTransition(t) {
-    const s = this.getMenuListItems(t).map((a) => a.querySelector("[data-js-menu-link]")), n = t.querySelector(`${this.options.backSelector}`), i = t.querySelector("[data-js-menu-parent]");
-    return [n, i, ...s];
+    const n = this.getMenuListItems(t).map((a) => a.querySelector("[data-js-menu-link]")), s = t.querySelector(`${this.options.backSelector}`), i = t.querySelector("[data-js-menu-parent]");
+    return [s, i, ...n];
   }
   /**
    * The callback that is fired when the menu navigates down a level.
@@ -202,8 +202,8 @@ class y {
    * @param {Object}
    */
   onShowParentStart(t, e) {
-    this.isAnimating = !0, this.getMenuListItems(e).forEach((n) => {
-      n.classList.remove("hidden");
+    this.isAnimating = !0, this.getMenuListItems(e).forEach((s) => {
+      s.classList.remove("hidden");
     });
   }
   /**
@@ -221,15 +221,15 @@ class y {
    * @returns {gsap.core.Timeline} The GSAP timeline for the animation.
    */
   onShowChildTween(t, e) {
-    const s = e.offsetHeight, n = this.getElementsToHideForMenuTransition(t), i = this.getElementsToHideForMenuTransition(e), o = new u.timeline();
-    return o.to(n, {
+    const n = e.offsetHeight, s = this.getElementsToHideForMenuTransition(t), i = this.getElementsToHideForMenuTransition(e), o = new u.timeline();
+    return o.to(s, {
       autoAlpha: 0,
       x: -20,
       duration: this.options.childTween.outDuration,
       ease: this.options.childTween.outEase,
       stagger: this.options.childTween.outStagger
     }), o.to(this.context, {
-      height: `${s}px`,
+      height: `${n}px`,
       duration: this.options.childTween.heightDuration,
       ease: this.options.childTween.heightEase
     }), o.set(e, {
@@ -250,9 +250,10 @@ class y {
    * This is particularly useful for cleaning up after dynamic style changes during menu animations.
    * @param {HTMLElement} context - The context within which to remove inline styles.
    */
-  removeInlineStylesFromChildren(t) {
-    t.querySelectorAll("[style]").forEach((e) => {
-      u.set(e, {
+  removeInlineStyles(t) {
+    const e = Array.from(t.querySelectorAll("[style]"));
+    t.hasAttribute("style") && e.push(t), e.forEach((n) => {
+      u.set(n, {
         clearProps: "all",
         overwrite: !0
       });
@@ -267,8 +268,8 @@ class y {
   getNaturalHeight(t) {
     const e = t.offsetHeight;
     t.style.height = "auto";
-    const s = t.offsetHeight;
-    return t.style.height = `${e}px`, s;
+    const n = t.offsetHeight;
+    return t.style.height = `${e}px`, n;
   }
   /**
    * Resets the menu items to their initial state, removing any dynamic modifications.
@@ -284,7 +285,7 @@ class y {
    * This is useful for cleaning up and preparing the menu for another interaction.
    */
   reset() {
-    this.isAnimating = !1, typeof this.options.onReset == "function" && this.options.onReset(), this.resetMenuListItems(), this.removeInlineStylesFromChildren(this.context), this.menuResizeObserver && this.menuResizeObserver.disconnect();
+    this.isAnimating = !1, typeof this.options.onReset == "function" && this.options.onReset(), this.resetMenuListItems(), this.removeInlineStyles(this.context), this.menuResizeObserver && this.menuResizeObserver.disconnect();
   }
   /**
    * Cleans up event listeners and resets the menu, preparing the instance for garbage collection.
@@ -295,5 +296,5 @@ class y {
   }
 }
 export {
-  y as Drilldown
+  C as Drilldown
 };

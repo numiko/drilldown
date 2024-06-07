@@ -227,7 +227,7 @@ describe('Interacting with the menu', () => {
     expect(nonActiveParentMenuItem.classList.contains('hidden')).toBe(true);
   });
 
-  it('should remove inline styles of all children when reset', async () => {
+  it('should remove inline styles on root menu and all children when reset', async () => {
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
       childTween: {
@@ -237,14 +237,16 @@ describe('Interacting with the menu', () => {
     });
     drilldown.init();
 
-    const elementsInMenu = menu.querySelectorAll('*');
+    const elementsWithStyles = Array.from(menu.querySelectorAll('[style]'));
+    elementsWithStyles.push(menu);
+
     const linkWithSubmenu = document.querySelector('[data-js-menu-next]');
 
     linkWithSubmenu.click();
     await delay(250);
     drilldown.reset();
 
-    elementsInMenu.forEach((element) => {
+    elementsWithStyles.forEach((element) => {
       expect(element.getAttribute('style')).toBe(null);
     });
   });
