@@ -1,9 +1,9 @@
 var x = Object.defineProperty;
-var C = (r, t, e) => t in r ? x(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
-var M = (r, t, e) => (C(r, typeof t != "symbol" ? t + "" : t, e), e);
+var O = (r, t, e) => t in r ? x(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
+var M = (r, t, e) => (O(r, typeof t != "symbol" ? t + "" : t, e), e);
 import { gsap as u } from "gsap";
 const h = 0.2, l = "power1.out";
-class R {
+class C {
   /**
    * Initializes a new instance of the Drilldown class.
    * @param {HTMLElement} context - The element to initialize the drilldown on.
@@ -41,7 +41,7 @@ class R {
         stagger: this.options.parentTween.inStagger
       }), i;
     });
-    var n, s, i, o, a, c, m, g, p, d, w, T, S, b, f, v, E, I, A, y;
+    var n, s, i, o, a, c, m, g, p, w, T, d, S, b, f, v, E, I, A, y;
     this.bindThisToMemberFunctions(), this.context = t, this.options = {
       backSelector: e.backSelector || "[data-js-menu-back]",
       nextSelector: e.nextSelector || "[data-js-menu-next]",
@@ -58,11 +58,11 @@ class R {
         heightDuration: ((m = e.childTween) == null ? void 0 : m.heightDuration) || h,
         heightEase: ((g = e.childTween) == null ? void 0 : g.heightEase) || l,
         onStart: ((p = e.childTween) == null ? void 0 : p.onStart) || null,
-        onComplete: ((d = e.childTween) == null ? void 0 : d.onComplete) || null
+        onComplete: ((w = e.childTween) == null ? void 0 : w.onComplete) || null
       },
       parentTween: {
-        outDuration: ((w = e.parentTween) == null ? void 0 : w.outDuration) || h,
-        outEase: ((T = e.parentTween) == null ? void 0 : T.outEase) || l,
+        outDuration: ((T = e.parentTween) == null ? void 0 : T.outDuration) || h,
+        outEase: ((d = e.parentTween) == null ? void 0 : d.outEase) || l,
         outStagger: ((S = e.parentTween) == null ? void 0 : S.outStagger) || 0,
         inDuration: ((b = e.parentTween) == null ? void 0 : b.inDuration) || h,
         inEase: ((f = e.parentTween) == null ? void 0 : f.inEase) || l,
@@ -250,7 +250,7 @@ class R {
    * This is particularly useful for cleaning up after dynamic style changes during menu animations.
    * @param {HTMLElement} context - The context within which to remove inline styles.
    */
-  removeInlineStylesFromChildren(t) {
+  removeInlineStyles(t) {
     const e = Array.from(t.querySelectorAll("[style]"));
     t.hasAttribute("style") && e.push(t), e.forEach((n) => {
       u.set(n, {
@@ -285,7 +285,7 @@ class R {
    * This is useful for cleaning up and preparing the menu for another interaction.
    */
   reset() {
-    this.isAnimating = !1, typeof this.options.onReset == "function" && this.options.onReset(), this.resetMenuListItems(), this.removeInlineStylesFromChildren(this.context), this.menuResizeObserver && this.menuResizeObserver.disconnect();
+    this.isAnimating = !1, typeof this.options.onReset == "function" && this.options.onReset(), this.resetMenuListItems(), this.removeInlineStyles(this.context), this.menuResizeObserver && this.menuResizeObserver.disconnect();
   }
   /**
    * Cleans up event listeners and resets the menu, preparing the instance for garbage collection.
@@ -296,5 +296,5 @@ class R {
   }
 }
 export {
-  R as Drilldown
+  C as Drilldown
 };
