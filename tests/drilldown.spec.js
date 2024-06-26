@@ -1,6 +1,4 @@
 import { Window } from 'happy-dom';
-import fs from 'fs';
-import path from 'path';
 import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
 import { Drilldown } from '../lib/Drilldown';
 
@@ -9,7 +7,42 @@ async function delay(ms) {
 }
 
 // Read the HTML document content
-const htmlDocumentContent = fs.readFileSync(path.join(process.cwd(), 'index.html')).toString();
+const htmlDocumentContent = `
+  <div id="menu" class="overflow-hidden bg-black text-white relative top-full left-0 w-full" data-js-menu-container data-js-menu-container-level="0" aria-hidden="false">
+    <ul class="flex flex-col">
+      <li data-js-menu-item data-js-menu-item-level="0">
+        <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="0">
+          <span>Top level 1</span>
+        </a>
+      </li>
+      <li data-js-menu-item data-js-menu-item-level="0">
+        <button class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" type="button" data-js-menu-link data-js-menu-link-level="0" data-js-menu-next aria-controls="menu_1">
+          <span>Top level 2</span>
+        </button>
+        <div id="menu_1" class="invisible absolute z-10 w-full top-0" data-js-menu-container data-js-menu-container-level="1">
+          <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" data-js-menu-back>
+            <span>Go back</span>
+          </button>
+          <div>
+            <a class="flex w-full text-left items-center justify-between px-9 py-7 group" data-js-menu-parent href="http://www.example.com">Top level 2</a>
+          </div>
+          <ul class="flex flex-col">
+            <li data-js-menu-item data-js-menu-item-level="1">
+              <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="1">
+                <span>Second level 1</span>
+              </a>
+            </li>
+            <li data-js-menu-item data-js-menu-item-level="1">
+              <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="1">
+                <span>Second level 3</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+`;
 
 // Initialise Happy DOM
 const window = new Window();
