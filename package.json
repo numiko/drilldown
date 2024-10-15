@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A package to create a menu system enabling you to drilldown to deeper levels and navigate back up",
   "author": "Numiko",
+  "private": true,
   "license": "ISC",
   "homepage": "https://bitbucket.org/numiko/drilldown#readme",
   "repository": {
