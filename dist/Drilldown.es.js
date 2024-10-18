@@ -1,6 +1,6 @@
 var x = Object.defineProperty;
 var O = (r, t, e) => t in r ? x(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
-var M = (r, t, e) => (O(r, typeof t != "symbol" ? t + "" : t, e), e);
+var M = (r, t, e) => O(r, typeof t != "symbol" ? t + "" : t, e);
 import { gsap as u } from "gsap";
 const h = 0.2, l = "power1.out";
 class C {
@@ -95,15 +95,12 @@ class C {
    * @returns {void}
    */
   handleMenuClick(t) {
-    if (this.isAnimating)
-      return;
+    if (this.isAnimating) return;
     const e = t.target.closest(this.options.nextSelector) || t.target.closest(this.options.backSelector);
-    if (!e)
-      return;
+    if (!e) return;
     t.preventDefault();
     const n = !!e.closest(this.options.nextSelector), s = e.closest(this.options.submenuSelector), i = this.getTargetMenu(e, n);
-    if (!i)
-      return;
+    if (!i) return;
     const o = n ? this.createAnimation(s, i, !0) : this.createAnimation(s, i, !1);
     o == null || o.play();
   }
