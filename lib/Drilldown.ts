@@ -2,13 +2,42 @@ import { gsap } from 'gsap';
 
 const DEFAULT_DURATION = 0.2;
 const DEFAULT_EASE = 'power1.out';
+
+type TweenOptions = {
+  outDuration: number;
+  outEase: string;
+  outStagger: number;
+  inDuration: number;
+  inEase: string;
+  inStagger: number;
+  heightDuration: number;
+  heightEase: string;
+  onStart?: ((currentMenu: HTMLElement, targetMenu: HTMLElement) => void) | null;
+  onComplete?: ((currentMenu: HTMLElement, targetMenu: HTMLElement) => void) | null;
+}
+
+type DrilldownOptions = {
+  backSelector?: string;
+  nextSelector?: string;
+  submenuSelector?: string;
+  itemSelector?: string;
+  onReset?: (() => void) | null;
+  childTween?: Partial<TweenOptions>;
+  parentTween?: Partial<TweenOptions>;
+}
+
 export class Drilldown {
+  private context: HTMLElement | null;
+  private options: Required<DrilldownOptions>;
+  private activeMenuItem: HTMLElement | null;
+  private menuResizeObserver: ResizeObserver | null;
+  private isAnimating: boolean = false;
   /**
    * Initializes a new instance of the Drilldown class.
-   * @param {HTMLElement} context - The element to initialize the drilldown on.
-   * @param {Object} options - Configuration options for the drilldown.
+   * @param context - The element to initialize the drilldown on.
+   * @param options - Configuration options for the drilldown.
    */
-  constructor(context, options = {}) {
+  constructor(context: HTMLElement, options: DrilldownOptions = {}) {
     this.bindThisToMemberFunctions();
 
     this.context = context;
@@ -59,16 +88,16 @@ export class Drilldown {
   /**
    * Binds instance to member functions to preserve the `this` context.
    */
-  bindThisToMemberFunctions() {
+  private bindThisToMemberFunctions(): void {
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
     methods.forEach(method => {
-      if (typeof this[method] === 'function') {
-        this[method] = this[method].bind(this);
+      if (typeof (this as Record<string, unknown>)[method] === 'function') {
+        (this as Record<string, unknown>)[method] = ((this as Record<string, unknown>)[method] as (...args: unknown[]) => unknown).bind(this);
       }
     });
   }
 
-  init() {
+  public init(): void {
     this.context.addEventListener('click', this.handleMenuClick);
   }
 
@@ -78,19 +107,18 @@ export class Drilldown {
    * This function prevents navigation if animations are currently running or if navigation is disabled.
    * It also ensures that the default action for the click event is prevented.
    *
-   * @param {MouseEvent} e - The mouse event triggered by clicking on a menu item.
-   * @returns {void}
+   * @param e - The mouse event triggered by clicking on a menu item.
    */
-  handleMenuClick(e) {
+  private handleMenuClick = (e: MouseEvent): void => {
     if (this.isAnimating) return;
 
-    const target = e.target.closest(this.options.nextSelector) || e.target.closest(this.options.backSelector);
+    const target = (e.target as Element).closest(this.options.nextSelector) || (e.target as Element).closest(this.options.backSelector);
     if (!target) return;
 
     e.preventDefault();
-    const isNextButton = !!target.closest(this.options.nextSelector);
-    const currentMenu = target.closest(this.options.submenuSelector);
-    const targetMenu = this.getTargetMenu(target, isNextButton);
+    const isNextButton = !!(target as Element).closest(this.options.nextSelector);
+    const currentMenu = (target as Element).closest(this.options.submenuSelector) as HTMLElement;
+    const targetMenu = this.getTargetMenu(target as Element, isNextButton);
 
     if (!targetMenu) return;
 
@@ -100,25 +128,25 @@ export class Drilldown {
       : this.createAnimation(currentMenu, targetMenu, false);
 
     animation?.play();
-  }
+  };
 
   /**
    * Determines the target menu based on the element that triggered the event.
    * If the action is to navigate to a next (child) menu, it finds the submenu within the active menu item.
    * If the action is to go back, it finds the parent menu of the current submenu.
    *
-   * @param {Element} element - The element (typically a button or link) that triggered the navigation action.
-   * @param {boolean} isNextButton - A flag indicating whether the navigation action is moving forward to a child menu.
-   * @returns {HTMLElement|null} The target menu to navigate to, or null if no target menu can be determined.
+   * @param element - The element (typically a button or link) that triggered the navigation action.
+   * @param isNextButton - A flag indicating whether the navigation action is moving forward to a child menu.
+   * @returns The target menu to navigate to, or null if no target menu can be determined.
  */
-  getTargetMenu(element, isNextButton) {
+  private getTargetMenu(element: Element, isNextButton: boolean): HTMLElement | null {
     if (isNextButton) {
-      this.activeMenuItem = element.closest(this.options.itemSelector);
-      return this.activeMenuItem.querySelector(this.options.submenuSelector);
+      this.activeMenuItem = element.closest(this.options.itemSelector) as HTMLElement;
+      return this.activeMenuItem?.querySelector(this.options.submenuSelector) as HTMLElement || null;
     }
     else {
-      this.activeMenuItem = element.closest(this.options.itemSelector);
-      return this.activeMenuItem.closest(this.options.submenuSelector);
+      this.activeMenuItem = element.closest(this.options.itemSelector) as HTMLElement;
+      return this.activeMenuItem?.closest(this.options.submenuSelector) as HTMLElement || null;
     }
   }
 
@@ -127,12 +155,12 @@ export class Drilldown {
    * This function initializes a GSAP tween for either showing a child menu (next) or a parent menu (back),
    * depending on the direction of navigation. It also sets up onStart and onComplete callbacks for the animation.
    *
-   * @param {HTMLElement} currentMenu - The currently active menu that is being transitioned from.
-   * @param {HTMLElement} targetMenu - The target menu that is being transitioned to.
-   * @param {boolean} isChild - Determines the type of animation to create; true for child menu, false for parent menu.
-   * @returns {gsap.core.Timeline} The GSAP timeline instance for the created animation.
+   * @param currentMenu - The currently active menu that is being transitioned from.
+   * @param targetMenu - The target menu that is being transitioned to.
+   * @param isChild - Determines the type of animation to create; true for child menu, false for parent menu.
+   * @returns The GSAP timeline instance for the created animation.
    */
-  createAnimation(currentMenu, targetMenu, isChild) {
+  private createAnimation(currentMenu: HTMLElement, targetMenu: HTMLElement, isChild: boolean): gsap.core.Timeline {
     const tween = isChild ? this.onShowChildTween(currentMenu, targetMenu) : this.onShowParentTween(currentMenu, targetMenu);
     this.setupTweenCallbacks(tween, currentMenu, targetMenu, isChild);
     tween.pause();
@@ -144,12 +172,12 @@ export class Drilldown {
    * for the tween animation based on whether it's an animation for showing a child menu or a parent menu.
    * It integrates both custom callback functions provided via options and internal logic defined in the class.
    *
-   * @param {gsap.core.Tween} tween - The GSAP tween instance that controls the menu animation.
-   * @param {HTMLElement} currentMenu - The currently active menu element that is being transitioned from.
-   * @param {HTMLElement} targetMenu - The target menu element that is being transitioned to.
-   * @param {boolean} isChild - Flag to determine if the animation is for showing a child menu (true) or a parent menu (false).
+   * @param tween - The GSAP tween instance that controls the menu animation.
+   * @param currentMenu - The currently active menu element that is being transitioned from.
+   * @param targetMenu - The target menu element that is being transitioned to.
+   * @param isChild - Flag to determine if the animation is for showing a child menu (true) or a parent menu (false).
    */
-  setupTweenCallbacks(tween, currentMenu, targetMenu, isChild) {
+  private setupTweenCallbacks(tween: gsap.core.Timeline, currentMenu: HTMLElement, targetMenu: HTMLElement, isChild: boolean): void {
     const tweenOptions = isChild ? this.options.childTween : this.options.parentTween;
     const onShowStart = isChild ? this.onShowChildStart : this.onShowParentStart;
     const onShowComplete = isChild ? this.onShowChildComplete : this.onShowParentComplete;
@@ -168,14 +196,14 @@ export class Drilldown {
   /**
    * Creates a ResizeObserver to adjust the height of the drilldown menu.
    * This ensures the menu height matches the content, especially useful when content changes size.
-   * @returns {ResizeObserver} The created ResizeObserver instance.
+   * @returns The created ResizeObserver instance.
    */
-  createMenuResizeObserver() {
+  private createMenuResizeObserver(): ResizeObserver {
     if (!this.menuResizeObserver) {
       this.menuResizeObserver = new ResizeObserver(entries => {
-        for (let entry of entries) {
+        for (const entry of entries) {
           // Make the root menu dropdown height the same height as the child menu if it resizes in anyway e.g. wraps on new lines, fontsize increase.
-          this.context.style.height = entry.target.offsetHeight + 'px';
+          this.context.style.height = (entry.target as HTMLElement).offsetHeight + 'px';
         }
       });
     }
@@ -186,30 +214,30 @@ export class Drilldown {
   /**
    * Returns the main list items for a given menu. It does not include supplementary items, for
    * example, the parent link or the back button.
-   * @param {HTMLElement} menu
-   * @returns {Array}
+   * @param menu
+   * @returns Array of menu item elements
    */
-  getMenuListItems(menu) {
-    const childMenu = Array.from(menu.children).filter((item) => item.matches('ul'))[0];
+  private getMenuListItems(menu: HTMLElement): HTMLElement[] {
+    const childMenu = Array.from(menu.children).filter((item) => (item as Element).matches('ul'))[0] as HTMLElement;
 
     if (!childMenu) return [];
 
-    const childMenuitems = Array.from(childMenu.children).filter((item) => item.matches(this.options.itemSelector));
+    const childMenuitems = Array.from(childMenu.children).filter((item) => (item as Element).matches(this.options.itemSelector)) as HTMLElement[];
 
     return childMenuitems;
   }
 
   /**
    * Returns the elements that will be hidden when a menu is transitioning.
-   * @param {HTMLElement} menu
-   * @returns {Array}
+   * @param menu
+   * @returns Array of elements to hide
    */
-  getElementsToHideForMenuTransition(menu) {
+  private getElementsToHideForMenuTransition(menu: HTMLElement): (HTMLElement | null)[] {
     const menuItems = this.getMenuListItems(menu);
-    const menuItemLinks = menuItems.map((item) => item.querySelector('[data-js-menu-link]'));
+    const menuItemLinks = menuItems.map((item) => item.querySelector('[data-js-menu-link]') as HTMLElement | null);
 
-    const backButton = menu.querySelector(`${this.options.backSelector}`);
-    const parentLink = menu.querySelector('[data-js-menu-parent]');
+    const backButton = menu.querySelector(`${this.options.backSelector}`) as HTMLElement | null;
+    const parentLink = menu.querySelector('[data-js-menu-parent]') as HTMLElement | null;
     const combinedMenuItems = [backButton, parentLink, ...menuItemLinks];
 
     return combinedMenuItems;
@@ -217,9 +245,8 @@ export class Drilldown {
 
   /**
    * The callback that is fired when the menu navigates down a level.
-   * @param {Object}
    */
-  onShowChildStart(currentMenu, targetMenu) {
+  private onShowChildStart(currentMenu: HTMLElement, targetMenu: HTMLElement): void {
     currentMenu.scrollTop = 0;
     targetMenu.scrollTop = 0;
     this.isAnimating = true;
@@ -227,9 +254,8 @@ export class Drilldown {
 
   /**
    * The callback that is fired after the menu has moved down a level.
-   * @param {Object}
    */
-  onShowChildComplete(currentMenu, targetMenu) {
+  private onShowChildComplete(currentMenu: HTMLElement, targetMenu: HTMLElement): void {
     this.isAnimating = false;
 
     /**
@@ -254,9 +280,8 @@ export class Drilldown {
 
   /**
    * The callback that is fired when the menu navigates up a level.
-   * @param {Object}
    */
-  onShowParentStart(currentMenu, targetMenu) {
+  private onShowParentStart(_currentMenu: HTMLElement, targetMenu: HTMLElement): void {
     this.isAnimating = true;
 
     const targetMenuItems = this.getMenuListItems(targetMenu);
@@ -267,9 +292,8 @@ export class Drilldown {
 
   /**
    * The callback that is fired after the menu has moved up a level.
-   * @param {Object}
    */
-  onShowParentComplete(currentMenu, targetMenu) {
+  private onShowParentComplete(currentMenu: HTMLElement, targetMenu: HTMLElement): void {
     this.isAnimating = false;
 
     // Stop observing the current menu
@@ -290,15 +314,15 @@ export class Drilldown {
   /**
    * Generates the tween animation for showing a child menu.
    * This method configures the animation sequence for transitioning to a submenu.
-   * @param {HTMLElement} currentMenu - The currently active menu.
-   * @param {HTMLElement} targetMenu - The submenu to be displayed.
-   * @returns {gsap.core.Timeline} The GSAP timeline for the animation.
+   * @param currentMenu - The currently active menu.
+   * @param targetMenu - The submenu to be displayed.
+   * @returns The GSAP timeline for the animation.
    */
-  onShowChildTween(currentMenu, targetMenu) {
+  private onShowChildTween(currentMenu: HTMLElement, targetMenu: HTMLElement): gsap.core.Timeline {
     const submenuHeight = targetMenu.offsetHeight;
     const currentMenuItems = this.getElementsToHideForMenuTransition(currentMenu);
     const submenuItems = this.getElementsToHideForMenuTransition(targetMenu);
-    const tl = new gsap.timeline();
+    const tl = gsap.timeline();
 
     tl.to(currentMenuItems, {
       autoAlpha: 0,
@@ -335,15 +359,15 @@ export class Drilldown {
   /**
    * Generates the tween animation for showing a parent menu.
    * This method configures the animation sequence for transitioning back to a parent menu.
-   * @param {HTMLElement} currentMenu - The currently active submenu.
-   * @param {HTMLElement} targetMenu - The parent menu to be displayed.
-   * @returns {gsap.core.Timeline} The GSAP timeline for the animation.
+   * @param currentMenu - The currently active submenu.
+   * @param targetMenu - The parent menu to be displayed.
+   * @returns The GSAP timeline for the animation.
    */
-  onShowParentTween = (currentMenu, targetMenu) => {
+  private onShowParentTween = (currentMenu: HTMLElement, targetMenu: HTMLElement): gsap.core.Timeline => {
     const parentMenuItems = this.getElementsToHideForMenuTransition(targetMenu);
     const currentMenuItems = this.getElementsToHideForMenuTransition(currentMenu);
 
-    const tl = new gsap.timeline();
+    const tl = gsap.timeline();
 
     tl.to(currentMenuItems, {
       x: 20,
@@ -384,12 +408,12 @@ export class Drilldown {
   /**
    * Removes all inline styles from elements within a given context.
    * This is particularly useful for cleaning up after dynamic style changes during menu animations.
-   * @param {HTMLElement} context - The context within which to remove inline styles.
+   * @param context - The context within which to remove inline styles.
    */
-  removeInlineStyles(context) {
+  private removeInlineStyles(context: HTMLElement): void {
 
     // Create an array of child elements with inline styles as we might need to also add the context element
-    const elementsWithStyles = Array.from(context.querySelectorAll('[style]'));
+    const elementsWithStyles = Array.from(context.querySelectorAll('[style]')) as HTMLElement[];
 
     // Include the context element if it has inline styles
     if (context.hasAttribute('style')) {
@@ -407,10 +431,10 @@ export class Drilldown {
   /**
    * Calculates the natural height of an element, disregarding any explicitly set heights.
    * This is useful for animations that need to adjust to the content's natural size.
-   * @param {HTMLElement} element - The element to measure.
-   * @returns {number} The natural height of the element.
+   * @param element - The element to measure.
+   * @returns The natural height of the element.
    */
-  getNaturalHeight(element) {
+  private getNaturalHeight(element: HTMLElement): number {
     const cachedHeight = element.offsetHeight;
     element.style.height = 'auto';
     const naturalHeight = element.offsetHeight;
@@ -423,10 +447,10 @@ export class Drilldown {
    * Resets the menu items to their initial state, removing any dynamic modifications.
    * This method is typically called when the menu is being reset or destroyed.
    */
-  resetMenuListItems() {
+  private resetMenuListItems(): void {
     const listItems = this.context.querySelectorAll(this.options.itemSelector);
     listItems.forEach((listItem) => {
-      listItem.classList.remove('hidden');
+      (listItem as HTMLElement).classList.remove('hidden');
     });
   }
 
@@ -434,7 +458,7 @@ export class Drilldown {
    * Resets the drilldown menu to its initial state, removing any dynamic styles or selections.
    * This is useful for cleaning up and preparing the menu for another interaction.
    */
-  reset() {
+  public reset(): void {
     this.isAnimating = false;
 
     if (typeof this.options.onReset === 'function') {
@@ -457,7 +481,7 @@ export class Drilldown {
    * Cleans up event listeners and resets the menu, preparing the instance for garbage collection.
    * This method should be called to prevent memory leaks when the drilldown menu is no longer needed.
    */
-  destroy() {
+  public destroy(): void {
     this.context.removeEventListener('click', this.handleMenuClick);
     this.reset();
   }
