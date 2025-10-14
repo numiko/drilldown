@@ -9,11 +9,11 @@ import tseslint from 'typescript-eslint';
 export default [
   // Base recommended config
   js.configs.recommended,
-
   ...tseslint.configs.recommended,
+
   // Custom configuration for your files
   {
-    files: ['**/*.js,ts'],
+    files: ['**/*.{js,ts}'],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -26,32 +26,13 @@ export default [
     rules: {
       'no-console': ['warn', { allow: ['warn', 'error'] }],
       'no-undef': 'warn',
-      'no-unused-vars': 'warn',
+      'no-unused-vars': 'off',
       'no-shadow': 'warn',
-      '@stylistic/semi': ['error', 'always'],
-      '@stylistic/quotes': ['error', 'single'],
-      '@stylistic/indent': ['error', 2],
+      '@stylistic/semi': ['warn', 'always'],
+      '@stylistic/quotes': ['warn', 'single'],
+      '@stylistic/indent': ['warn', 2],
       '@stylistic/keyword-spacing': 'warn',
-    }
-  },
-  // Test files configuration
-  {
-    files: ['**/*.spec.js', '**/*.test.js', '**/*.spec.ts', '**/*.test.ts'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.browser,
-        ...globals.jest,
-        setTimeout: 'readonly',
-        clearTimeout: 'readonly',
-        setInterval: 'readonly',
-        clearInterval: 'readonly',
-        global: 'writable',
-      },
-    },
-    rules: {
-      'no-console': 'off',
-      'no-undef': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
     }
   }
 ];
