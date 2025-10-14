@@ -1,76 +1,75 @@
-var x = Object.defineProperty;
-var O = (r, t, e) => t in r ? x(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
-var M = (r, t, e) => O(r, typeof t != "symbol" ? t + "" : t, e);
-import { gsap as u } from "gsap";
-const h = 0.2, l = "power1.out";
-class C {
+import { gsap as T } from "gsap";
+const u = 0.2, c = "power1.out";
+class H {
   /**
    * Initializes a new instance of the Drilldown class.
-   * @param {HTMLElement} context - The element to initialize the drilldown on.
-   * @param {Object} options - Configuration options for the drilldown.
+   * @param context - The element to initialize the drilldown on.
+   * @param options - Configuration options for the drilldown.
    */
   constructor(t, e = {}) {
-    /**
-     * Generates the tween animation for showing a parent menu.
-     * This method configures the animation sequence for transitioning back to a parent menu.
-     * @param {HTMLElement} currentMenu - The currently active submenu.
-     * @param {HTMLElement} targetMenu - The parent menu to be displayed.
-     * @returns {gsap.core.Timeline} The GSAP timeline for the animation.
-     */
-    M(this, "onShowParentTween", (t, e) => {
-      const n = this.getElementsToHideForMenuTransition(e), s = this.getElementsToHideForMenuTransition(t), i = new u.timeline();
-      return i.to(s, {
+    var n, s, i, o, h, a, S, w, b, f, v, E, I, A, y, M, x, R, D, C;
+    this.activeMenuItem = null, this.menuResizeObserver = null, this.isAnimating = !1, this.handleMenuClick = (m) => {
+      if (this.isAnimating) return;
+      const g = m.target, l = g.closest(this.options.nextSelector) ?? g.closest(this.options.backSelector);
+      if (!l) return;
+      m.preventDefault();
+      const p = !!l.closest(this.options.nextSelector), r = l.closest(this.options.submenuSelector);
+      if (!r) return;
+      const d = this.getTargetMenu(l, p);
+      if (!d) return;
+      (p ? this.createAnimation(r, d, !0) : this.createAnimation(r, d, !1)).play();
+    }, this.onShowParentTween = (m, g) => {
+      const l = this.getElementsToHideForMenuTransition(g), p = this.getElementsToHideForMenuTransition(m), r = T.timeline();
+      return r.to(p, {
         x: 20,
         autoAlpha: 0,
         duration: this.options.parentTween.outDuration,
         ease: this.options.parentTween.outEase,
         stagger: this.options.parentTween.outStagger
-      }), i.to(this.context, {
+      }), r.to(this.context, {
         // This is calculated at runtime because the height of the parent menu changes
         // just before we animate it in: see the 'onShowParentStart' callback.
-        height: () => `${this.getNaturalHeight(e)}px`,
+        height: () => `${this.getNaturalHeight(g)}px`,
         duration: this.options.parentTween.heightDuration,
         ease: this.options.parentTween.heightEase
-      }), i.set(t, {
+      }), r.set(m, {
         autoAlpha: 0
-      }), i.to(n, {
+      }), r.to(l, {
         autoAlpha: 1,
         x: 0,
         duration: this.options.parentTween.inDuration,
         ease: this.options.parentTween.inEase,
         stagger: this.options.parentTween.inStagger
-      }), i;
-    });
-    var n, s, i, o, a, c, m, g, p, w, T, d, S, b, f, v, E, I, A, y;
-    this.bindThisToMemberFunctions(), this.context = t, this.options = {
+      }), r;
+    }, this.bindThisToMemberFunctions(), this.context = t, this.options = {
       backSelector: e.backSelector || "[data-js-menu-back]",
       nextSelector: e.nextSelector || "[data-js-menu-next]",
       submenuSelector: e.submenuSelector || "[data-js-menu-container]",
       itemSelector: e.itemSelector || "[data-js-menu-item]",
       onReset: e.onReset || null,
       childTween: {
-        outDuration: ((n = e.childTween) == null ? void 0 : n.outDuration) || h,
-        outEase: ((s = e.childTween) == null ? void 0 : s.outEase) || l,
+        outDuration: ((n = e.childTween) == null ? void 0 : n.outDuration) || u,
+        outEase: ((s = e.childTween) == null ? void 0 : s.outEase) || c,
         outStagger: ((i = e.childTween) == null ? void 0 : i.outStagger) || 0,
-        inDuration: ((o = e.childTween) == null ? void 0 : o.inDuration) || h,
-        inEase: ((a = e.childTween) == null ? void 0 : a.inEase) || l,
-        inStagger: ((c = e.childTween) == null ? void 0 : c.inStagger) || 0,
-        heightDuration: ((m = e.childTween) == null ? void 0 : m.heightDuration) || h,
-        heightEase: ((g = e.childTween) == null ? void 0 : g.heightEase) || l,
-        onStart: ((p = e.childTween) == null ? void 0 : p.onStart) || null,
-        onComplete: ((w = e.childTween) == null ? void 0 : w.onComplete) || null
+        inDuration: ((o = e.childTween) == null ? void 0 : o.inDuration) || u,
+        inEase: ((h = e.childTween) == null ? void 0 : h.inEase) || c,
+        inStagger: ((a = e.childTween) == null ? void 0 : a.inStagger) || 0,
+        heightDuration: ((S = e.childTween) == null ? void 0 : S.heightDuration) || u,
+        heightEase: ((w = e.childTween) == null ? void 0 : w.heightEase) || c,
+        onStart: ((b = e.childTween) == null ? void 0 : b.onStart) || null,
+        onComplete: ((f = e.childTween) == null ? void 0 : f.onComplete) || null
       },
       parentTween: {
-        outDuration: ((T = e.parentTween) == null ? void 0 : T.outDuration) || h,
-        outEase: ((d = e.parentTween) == null ? void 0 : d.outEase) || l,
-        outStagger: ((S = e.parentTween) == null ? void 0 : S.outStagger) || 0,
-        inDuration: ((b = e.parentTween) == null ? void 0 : b.inDuration) || h,
-        inEase: ((f = e.parentTween) == null ? void 0 : f.inEase) || l,
-        inStagger: ((v = e.parentTween) == null ? void 0 : v.inStagger) || 0,
-        heightDuration: ((E = e.parentTween) == null ? void 0 : E.heightDuration) || h,
-        heightEase: ((I = e.parentTween) == null ? void 0 : I.heightEase) || l,
-        onStart: ((A = e.parentTween) == null ? void 0 : A.onStart) || null,
-        onComplete: ((y = e.parentTween) == null ? void 0 : y.onComplete) || null
+        outDuration: ((v = e.parentTween) == null ? void 0 : v.outDuration) || u,
+        outEase: ((E = e.parentTween) == null ? void 0 : E.outEase) || c,
+        outStagger: ((I = e.parentTween) == null ? void 0 : I.outStagger) || 0,
+        inDuration: ((A = e.parentTween) == null ? void 0 : A.inDuration) || u,
+        inEase: ((y = e.parentTween) == null ? void 0 : y.inEase) || c,
+        inStagger: ((M = e.parentTween) == null ? void 0 : M.inStagger) || 0,
+        heightDuration: ((x = e.parentTween) == null ? void 0 : x.heightDuration) || u,
+        heightEase: ((R = e.parentTween) == null ? void 0 : R.heightEase) || c,
+        onStart: ((D = e.parentTween) == null ? void 0 : D.onStart) || null,
+        onComplete: ((C = e.parentTween) == null ? void 0 : C.onComplete) || null
       }
     }, this.activeMenuItem = null, this.menuResizeObserver = null;
   }
@@ -78,53 +77,36 @@ class C {
    * Binds instance to member functions to preserve the `this` context.
    */
   bindThisToMemberFunctions() {
-    Object.getOwnPropertyNames(Object.getPrototypeOf(this)).forEach((e) => {
-      typeof this[e] == "function" && (this[e] = this[e].bind(this));
+    const t = Object.getOwnPropertyNames(Object.getPrototypeOf(this)), e = this;
+    t.forEach((n) => {
+      const s = e[n];
+      typeof s == "function" && (e[n] = s.bind(this));
     });
   }
   init() {
     this.context.addEventListener("click", this.handleMenuClick);
   }
   /**
-   * Handles click events on the menu, determining whether a next or back button was clicked,
-   * and initiates the appropriate animation to transition between menus.
-   * This function prevents navigation if animations are currently running or if navigation is disabled.
-   * It also ensures that the default action for the click event is prevented.
-   *
-   * @param {MouseEvent} e - The mouse event triggered by clicking on a menu item.
-   * @returns {void}
-   */
-  handleMenuClick(t) {
-    if (this.isAnimating) return;
-    const e = t.target.closest(this.options.nextSelector) || t.target.closest(this.options.backSelector);
-    if (!e) return;
-    t.preventDefault();
-    const n = !!e.closest(this.options.nextSelector), s = e.closest(this.options.submenuSelector), i = this.getTargetMenu(e, n);
-    if (!i) return;
-    const o = n ? this.createAnimation(s, i, !0) : this.createAnimation(s, i, !1);
-    o == null || o.play();
-  }
-  /**
     * Determines the target menu based on the element that triggered the event.
     * If the action is to navigate to a next (child) menu, it finds the submenu within the active menu item.
     * If the action is to go back, it finds the parent menu of the current submenu.
     *
-    * @param {Element} element - The element (typically a button or link) that triggered the navigation action.
-    * @param {boolean} isNextButton - A flag indicating whether the navigation action is moving forward to a child menu.
-    * @returns {HTMLElement|null} The target menu to navigate to, or null if no target menu can be determined.
+    * @param element - The element (typically a button or link) that triggered the navigation action.
+    * @param isNextButton - A flag indicating whether the navigation action is moving forward to a child menu.
+    * @returns The target menu to navigate to, or null if no target menu can be determined.
   */
   getTargetMenu(t, e) {
-    return e ? (this.activeMenuItem = t.closest(this.options.itemSelector), this.activeMenuItem.querySelector(this.options.submenuSelector)) : (this.activeMenuItem = t.closest(this.options.itemSelector), this.activeMenuItem.closest(this.options.submenuSelector));
+    return this.activeMenuItem = t.closest(this.options.itemSelector), this.activeMenuItem ? e ? this.activeMenuItem.querySelector(this.options.submenuSelector) : this.activeMenuItem.closest(this.options.submenuSelector) : null;
   }
   /**
    * Creates the animation for transitioning between menus.
    * This function initializes a GSAP tween for either showing a child menu (next) or a parent menu (back),
    * depending on the direction of navigation. It also sets up onStart and onComplete callbacks for the animation.
    *
-   * @param {HTMLElement} currentMenu - The currently active menu that is being transitioned from.
-   * @param {HTMLElement} targetMenu - The target menu that is being transitioned to.
-   * @param {boolean} isChild - Determines the type of animation to create; true for child menu, false for parent menu.
-   * @returns {gsap.core.Timeline} The GSAP timeline instance for the created animation.
+   * @param currentMenu - The currently active menu that is being transitioned from.
+   * @param targetMenu - The target menu that is being transitioned to.
+   * @param isChild - Determines the type of animation to create; true for child menu, false for parent menu.
+   * @returns The GSAP timeline instance for the created animation.
    */
   createAnimation(t, e, n) {
     const s = n ? this.onShowChildTween(t, e) : this.onShowParentTween(t, e);
@@ -135,35 +117,39 @@ class C {
    * for the tween animation based on whether it's an animation for showing a child menu or a parent menu.
    * It integrates both custom callback functions provided via options and internal logic defined in the class.
    *
-   * @param {gsap.core.Tween} tween - The GSAP tween instance that controls the menu animation.
-   * @param {HTMLElement} currentMenu - The currently active menu element that is being transitioned from.
-   * @param {HTMLElement} targetMenu - The target menu element that is being transitioned to.
-   * @param {boolean} isChild - Flag to determine if the animation is for showing a child menu (true) or a parent menu (false).
+   * @param tween - The GSAP tween instance that controls the menu animation.
+   * @param currentMenu - The currently active menu element that is being transitioned from.
+   * @param targetMenu - The target menu element that is being transitioned to.
+   * @param isChild - Flag to determine if the animation is for showing a child menu (true) or a parent menu (false).
    */
   setupTweenCallbacks(t, e, n, s) {
-    const i = s ? this.options.childTween : this.options.parentTween, o = s ? this.onShowChildStart : this.onShowParentStart, a = s ? this.onShowChildComplete : this.onShowParentComplete;
+    const i = s ? this.options.childTween : this.options.parentTween, o = s ? this.onShowChildStart : this.onShowParentStart, h = s ? this.onShowChildComplete : this.onShowParentComplete;
     t.eventCallback("onStart", () => {
-      i.onStart && i.onStart(e, n), o(e, n);
+      var a;
+      (a = i.onStart) == null || a.call(i, e, n), o(e, n);
     }), t.eventCallback("onComplete", () => {
-      i.onComplete && i.onComplete(e, n), a(e, n);
+      var a;
+      (a = i.onComplete) == null || a.call(i, e, n), h(e, n);
     });
   }
   /**
    * Creates a ResizeObserver to adjust the height of the drilldown menu.
    * This ensures the menu height matches the content, especially useful when content changes size.
-   * @returns {ResizeObserver} The created ResizeObserver instance.
+   * @returns The created ResizeObserver instance.
    */
   createMenuResizeObserver() {
     return this.menuResizeObserver || (this.menuResizeObserver = new ResizeObserver((t) => {
-      for (let e of t)
-        this.context.style.height = e.target.offsetHeight + "px";
+      for (const e of t) {
+        const n = e.target;
+        this.context.style.height = `${n.offsetHeight}px`;
+      }
     })), this.menuResizeObserver;
   }
   /**
    * Returns the main list items for a given menu. It does not include supplementary items, for
    * example, the parent link or the back button.
-   * @param {HTMLElement} menu
-   * @returns {Array}
+   * @param menu
+   * @returns Array of menu item elements
    */
   getMenuListItems(t) {
     const e = Array.from(t.children).filter((s) => s.matches("ul"))[0];
@@ -171,23 +157,21 @@ class C {
   }
   /**
    * Returns the elements that will be hidden when a menu is transitioning.
-   * @param {HTMLElement} menu
-   * @returns {Array}
+   * @param menu
+   * @returns Array of elements to hide
    */
   getElementsToHideForMenuTransition(t) {
-    const n = this.getMenuListItems(t).map((a) => a.querySelector("[data-js-menu-link]")), s = t.querySelector(`${this.options.backSelector}`), i = t.querySelector("[data-js-menu-parent]");
+    const n = this.getMenuListItems(t).map((h) => h.querySelector("[data-js-menu-link]")), s = t.querySelector(this.options.backSelector), i = t.querySelector("[data-js-menu-parent]");
     return [s, i, ...n];
   }
   /**
    * The callback that is fired when the menu navigates down a level.
-   * @param {Object}
    */
   onShowChildStart(t, e) {
     t.scrollTop = 0, e.scrollTop = 0, this.isAnimating = !0;
   }
   /**
    * The callback that is fired after the menu has moved down a level.
-   * @param {Object}
    */
   onShowChildComplete(t, e) {
     this.isAnimating = !1, this.getMenuListItems(t).forEach((i) => {
@@ -196,7 +180,6 @@ class C {
   }
   /**
    * The callback that is fired when the menu navigates up a level.
-   * @param {Object}
    */
   onShowParentStart(t, e) {
     this.isAnimating = !0, this.getMenuListItems(e).forEach((s) => {
@@ -205,20 +188,19 @@ class C {
   }
   /**
    * The callback that is fired after the menu has moved up a level.
-   * @param {Object}
    */
   onShowParentComplete(t, e) {
-    this.isAnimating = !1, this.menuResizeObserver && this.menuResizeObserver.unobserve(t), e == this.context ? this.context.style.height = "auto" : this.createMenuResizeObserver().observe(e);
+    this.isAnimating = !1, this.menuResizeObserver && this.menuResizeObserver.unobserve(t), e === this.context ? this.context.style.height = "auto" : this.createMenuResizeObserver().observe(e);
   }
   /**
    * Generates the tween animation for showing a child menu.
    * This method configures the animation sequence for transitioning to a submenu.
-   * @param {HTMLElement} currentMenu - The currently active menu.
-   * @param {HTMLElement} targetMenu - The submenu to be displayed.
-   * @returns {gsap.core.Timeline} The GSAP timeline for the animation.
+   * @param currentMenu - The currently active menu.
+   * @param targetMenu - The submenu to be displayed.
+   * @returns The GSAP timeline for the animation.
    */
   onShowChildTween(t, e) {
-    const n = e.offsetHeight, s = this.getElementsToHideForMenuTransition(t), i = this.getElementsToHideForMenuTransition(e), o = new u.timeline();
+    const n = e.offsetHeight, s = this.getElementsToHideForMenuTransition(t), i = this.getElementsToHideForMenuTransition(e), o = T.timeline();
     return o.to(s, {
       autoAlpha: 0,
       x: -20,
@@ -245,12 +227,12 @@ class C {
   /**
    * Removes all inline styles from elements within a given context.
    * This is particularly useful for cleaning up after dynamic style changes during menu animations.
-   * @param {HTMLElement} context - The context within which to remove inline styles.
+   * @param context - The context within which to remove inline styles.
    */
   removeInlineStyles(t) {
     const e = Array.from(t.querySelectorAll("[style]"));
     t.hasAttribute("style") && e.push(t), e.forEach((n) => {
-      u.set(n, {
+      T.set(n, {
         clearProps: "all",
         overwrite: !0
       });
@@ -259,8 +241,8 @@ class C {
   /**
    * Calculates the natural height of an element, disregarding any explicitly set heights.
    * This is useful for animations that need to adjust to the content's natural size.
-   * @param {HTMLElement} element - The element to measure.
-   * @returns {number} The natural height of the element.
+   * @param element - The element to measure.
+   * @returns The natural height of the element.
    */
   getNaturalHeight(t) {
     const e = t.offsetHeight;
@@ -293,5 +275,5 @@ class C {
   }
 }
 export {
-  C as Drilldown
+  H as Drilldown
 };
