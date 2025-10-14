@@ -28,7 +28,10 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/Drilldown.es.js",
+      "import":  {
+        "types": "./dist/Drilldown.d.ts",
+        "module": "./dist/Drilldown.es.js"
+      },
       "require": "./dist/Drilldown.umd.js"
     }
   },

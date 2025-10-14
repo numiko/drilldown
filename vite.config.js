@@ -1,9 +1,18 @@
+import dts from 'vite-plugin-dts';
 import path from 'path';
 import eslint from 'vite-plugin-eslint';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [eslint()],
+  plugins: [
+    eslint(),
+    dts({
+      exclude: ['**/*.d.ts', 'node_modules', 'dist'],
+      external: ['gsap'],
+      skipDiagnostics: true,
+      tsconfigPath: './tsconfig.dts.json',
+    })
+  ],
   test: {
     environment: 'happy-dom',
     coverage: {
