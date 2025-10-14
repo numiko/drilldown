@@ -14,6 +14,11 @@ export default defineConfig({
       rollupTypes: true
     })
   ],
+  server: {
+    watch: {
+      include: ['src/**', 'lib/**']
+    }
+  },
   test: {
     environment: 'happy-dom',
     coverage: {
