@@ -14,7 +14,7 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, 'lib/Drilldown.ts'),
       name: 'Drilldown',
-      fileName: (format) => `Drilldown.${format}.ts`
+      fileName: (format) => `Drilldown.${format}.js`
     },
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
