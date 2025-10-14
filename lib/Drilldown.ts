@@ -27,11 +27,12 @@ type DrilldownOptions = {
 }
 
 export class Drilldown {
-  private context: HTMLElement | null;
+  private context: HTMLElement;
   private options: Required<DrilldownOptions>;
   private activeMenuItem: HTMLElement | null;
   private menuResizeObserver: ResizeObserver | null;
   private isAnimating: boolean = false;
+
   /**
    * Initializes a new instance of the Drilldown class.
    * @param context - The element to initialize the drilldown on.
@@ -75,12 +76,10 @@ export class Drilldown {
 
     /**
      * Store reference to the active menu item
-     * @type {HTMLElement}
      */
     this.activeMenuItem = null;
     /**
      * Store reference to the ResizeObserver
-     * @type {ResizeObserver | null}
      */
     this.menuResizeObserver = null;
   }
