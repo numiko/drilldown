@@ -11,6 +11,7 @@ export default defineConfig({
       external: ['gsap'],
       skipDiagnostics: true,
       tsconfigPath: './tsconfig.dts.json',
+      rollupTypes: true
     })
   ],
   test: {
