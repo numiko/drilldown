@@ -29,7 +29,7 @@ type TweenOptions = {
   heightEase: string;
   onStart?: TweenCallback | null;
   onComplete?: TweenCallback | null;
-}
+};
 
 /**
  * Configuration options for initializing a Drilldown instance.
@@ -55,7 +55,7 @@ type DrilldownOptions = {
    * Partial TweenOptions allowing selective override of default values.
    */
   parentTween?: Partial<TweenOptions>;
-}
+};
 
 /**
  * Internal type representing DrilldownOptions with all required properties populated.
@@ -69,7 +69,7 @@ type ResolvedDrilldownOptions = {
   readonly onReset: (() => void) | null;
   readonly childTween: TweenOptions;
   readonly parentTween: TweenOptions;
-}
+};
 
 class Drilldown {
   private readonly context: HTMLElement;
@@ -167,7 +167,7 @@ class Drilldown {
 
     e.preventDefault();
     const isNextButton = !!target.closest(this.options.nextSelector);
-    const currentMenu = target.closest(this.options.submenuSelector) as HTMLElement | null;
+    const currentMenu = target.closest<HTMLElement>(this.options.submenuSelector);
     if (!currentMenu) return;
 
     const targetMenu = this.getTargetMenu(target, isNextButton);
@@ -190,7 +190,7 @@ class Drilldown {
    * @returns The target menu to navigate to, or null if no target menu can be determined.
  */
   private getTargetMenu(element: Element, isNextButton: boolean): HTMLElement | null {
-    this.activeMenuItem = element.closest(this.options.itemSelector) as HTMLElement | null;
+    this.activeMenuItem = element.closest<HTMLElement>(this.options.itemSelector);
     if (!this.activeMenuItem) return null;
 
     if (isNextButton) {
