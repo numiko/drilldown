@@ -161,8 +161,8 @@ class Drilldown {
   private handleMenuClick = (e: MouseEvent): void => {
     if (this.isAnimating) return;
 
-    const clickedElement = e.target as Element;
-    const target = clickedElement.closest(this.options.nextSelector) ?? clickedElement.closest(this.options.backSelector);
+    const clickedElement = e.target as HTMLElement;
+    const target = clickedElement.closest<HTMLElement>(this.options.nextSelector) ?? clickedElement.closest(this.options.backSelector);
     if (!target) return;
 
     e.preventDefault();
@@ -189,7 +189,7 @@ class Drilldown {
    * @param isNextButton - A flag indicating whether the navigation action is moving forward to a child menu.
    * @returns The target menu to navigate to, or null if no target menu can be determined.
  */
-  private getTargetMenu(element: Element, isNextButton: boolean): HTMLElement | null {
+  private getTargetMenu(element: HTMLElement, isNextButton: boolean): HTMLElement | null {
     this.activeMenuItem = element.closest<HTMLElement>(this.options.itemSelector);
     if (!this.activeMenuItem) return null;
 
@@ -269,11 +269,11 @@ class Drilldown {
    * @returns Array of menu item elements
    */
   private getMenuListItems(menu: HTMLElement): HTMLElement[] {
-    const childMenu = Array.from(menu.children).filter((item) => (item as Element).matches('ul'))[0] as HTMLElement;
+    const childMenu = Array.from(menu.children).filter((item) => (item as HTMLElement).matches('ul'))[0] as HTMLElement;
 
     if (!childMenu) return [];
 
-    const childMenuitems = Array.from(childMenu.children).filter((item) => (item as Element).matches(this.options.itemSelector)) as HTMLElement[];
+    const childMenuitems = Array.from(childMenu.children).filter((item) => (item as HTMLElement).matches(this.options.itemSelector)) as HTMLElement[];
 
     return childMenuitems;
   }
