@@ -1,19 +1,19 @@
-import { Drilldown } from '../lib/Drilldown';
+import { Drilldown, type DrilldownOptions } from '../lib/Drilldown';
 
 /**
  * This file is used to run the package locally for development and testing purposes.
  */
-const menuElement = document.getElementById('menu');
+const menuElement = document.querySelector<HTMLElement>('#menu');
 if (!menuElement) {
   throw new Error('Menu element not found');
 }
 
-const options = {
+const options: DrilldownOptions = {
   backSelector: '[data-js-menu-back]',
   nextSelector: '[data-js-menu-next]',
   submenuSelector: '[data-js-menu-container]',
   itemSelector: '[data-js-menu-item]',
 };
 
-const menu = new Drilldown(menuElement, options);
+const menu: Drilldown = new Drilldown(menuElement, options);
 menu.init();

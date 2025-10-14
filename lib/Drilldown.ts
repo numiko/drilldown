@@ -1,8 +1,17 @@
 import { gsap } from 'gsap';
 
-const DEFAULT_DURATION = 0.2;
-const DEFAULT_EASE = 'power1.out';
+const DEFAULT_DURATION = 0.2 as const;
+const DEFAULT_EASE = 'power1.out' as const;
 
+/**
+ * Callback function type for tween animations.
+ */
+type TweenCallback = (currentMenu: HTMLElement, targetMenu: HTMLElement) => void;
+
+/**
+ * Configuration options for GSAP tween animations used in menu transitions.
+ * Controls the timing, easing, and callbacks for both outbound and inbound animations.
+ */
 type TweenOptions = {
   outDuration: number;
   outEase: string;
@@ -10,28 +19,64 @@ type TweenOptions = {
   inDuration: number;
   inEase: string;
   inStagger: number;
+  /**
+   * Duration in seconds for height transition animations.
+   */
   heightDuration: number;
+  /**
+   * Easing function for height transition animations.
+   */
   heightEase: string;
-  onStart?: ((currentMenu: HTMLElement, targetMenu: HTMLElement) => void) | null;
-  onComplete?: ((currentMenu: HTMLElement, targetMenu: HTMLElement) => void) | null;
+  onStart?: TweenCallback | null;
+  onComplete?: TweenCallback | null;
 }
 
+/**
+ * Configuration options for initializing a Drilldown instance.
+ * Defines selectors for menu elements and animation behavior customization.
+ */
 type DrilldownOptions = {
   backSelector?: string;
   nextSelector?: string;
   submenuSelector?: string;
   itemSelector?: string;
+  /**
+   * Callback function executed when the drilldown menu is reset.
+   * Useful for custom cleanup or state management.
+   */
   onReset?: (() => void) | null;
+  /**
+   * Animation configuration for child menu transitions.
+   * Partial TweenOptions allowing selective override of default values.
+   */
   childTween?: Partial<TweenOptions>;
+  /**
+   * Animation configuration for parent menu transitions.
+   * Partial TweenOptions allowing selective override of default values.
+   */
   parentTween?: Partial<TweenOptions>;
 }
 
-export class Drilldown {
-  private context: HTMLElement;
-  private options: Required<DrilldownOptions>;
-  private activeMenuItem: HTMLElement | null;
-  private menuResizeObserver: ResizeObserver | null;
-  private isAnimating: boolean = false;
+/**
+ * Internal type representing DrilldownOptions with all required properties populated.
+ * This ensures type safety for the internal options object.
+ */
+type ResolvedDrilldownOptions = {
+  readonly backSelector: string;
+  readonly nextSelector: string;
+  readonly submenuSelector: string;
+  readonly itemSelector: string;
+  readonly onReset: (() => void) | null;
+  readonly childTween: TweenOptions;
+  readonly parentTween: TweenOptions;
+}
+
+class Drilldown {
+  private readonly context: HTMLElement;
+  private readonly options: ResolvedDrilldownOptions;
+  private activeMenuItem: HTMLElement | null = null;
+  private menuResizeObserver: ResizeObserver | null = null;
+  private isAnimating = false;
 
   /**
    * Initializes a new instance of the Drilldown class.
@@ -88,10 +133,15 @@ export class Drilldown {
    * Binds instance to member functions to preserve the `this` context.
    */
   private bindThisToMemberFunctions(): void {
+    type InstanceType = Record<string, unknown>;
+
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this));
-    methods.forEach(method => {
-      if (typeof (this as Record<string, unknown>)[method] === 'function') {
-        (this as Record<string, unknown>)[method] = ((this as Record<string, unknown>)[method] as (...args: unknown[]) => unknown).bind(this);
+    const instance = this as InstanceType;
+
+    methods.forEach((method: string) => {
+      const property = instance[method];
+      if (typeof property === 'function') {
+        instance[method] = (property as (...args: unknown[]) => unknown).bind(this);
       }
     });
   }
@@ -111,22 +161,23 @@ export class Drilldown {
   private handleMenuClick = (e: MouseEvent): void => {
     if (this.isAnimating) return;
 
-    const target = (e.target as Element).closest(this.options.nextSelector) || (e.target as Element).closest(this.options.backSelector);
+    const clickedElement = e.target as Element;
+    const target = clickedElement.closest(this.options.nextSelector) ?? clickedElement.closest(this.options.backSelector);
     if (!target) return;
 
     e.preventDefault();
-    const isNextButton = !!(target as Element).closest(this.options.nextSelector);
-    const currentMenu = (target as Element).closest(this.options.submenuSelector) as HTMLElement;
-    const targetMenu = this.getTargetMenu(target as Element, isNextButton);
+    const isNextButton = !!target.closest(this.options.nextSelector);
+    const currentMenu = target.closest(this.options.submenuSelector) as HTMLElement | null;
+    if (!currentMenu) return;
 
+    const targetMenu = this.getTargetMenu(target, isNextButton);
     if (!targetMenu) return;
-
 
     const animation = isNextButton
       ? this.createAnimation(currentMenu, targetMenu, true)
       : this.createAnimation(currentMenu, targetMenu, false);
 
-    animation?.play();
+    animation.play();
   };
 
   /**
@@ -139,13 +190,13 @@ export class Drilldown {
    * @returns The target menu to navigate to, or null if no target menu can be determined.
  */
   private getTargetMenu(element: Element, isNextButton: boolean): HTMLElement | null {
+    this.activeMenuItem = element.closest(this.options.itemSelector) as HTMLElement | null;
+    if (!this.activeMenuItem) return null;
+
     if (isNextButton) {
-      this.activeMenuItem = element.closest(this.options.itemSelector) as HTMLElement;
-      return this.activeMenuItem?.querySelector(this.options.submenuSelector) as HTMLElement || null;
-    }
-    else {
-      this.activeMenuItem = element.closest(this.options.itemSelector) as HTMLElement;
-      return this.activeMenuItem?.closest(this.options.submenuSelector) as HTMLElement || null;
+      return this.activeMenuItem.querySelector(this.options.submenuSelector);
+    } else {
+      return this.activeMenuItem.closest(this.options.submenuSelector);
     }
   }
 
@@ -182,12 +233,12 @@ export class Drilldown {
     const onShowComplete = isChild ? this.onShowChildComplete : this.onShowParentComplete;
 
     tween.eventCallback('onStart', () => {
-      if (tweenOptions.onStart) tweenOptions.onStart(currentMenu, targetMenu);
+      tweenOptions.onStart?.(currentMenu, targetMenu);
       onShowStart(currentMenu, targetMenu);
     });
 
     tween.eventCallback('onComplete', () => {
-      if (tweenOptions.onComplete) tweenOptions.onComplete(currentMenu, targetMenu);
+      tweenOptions.onComplete?.(currentMenu, targetMenu);
       onShowComplete(currentMenu, targetMenu);
     });
   }
@@ -202,7 +253,8 @@ export class Drilldown {
       this.menuResizeObserver = new ResizeObserver(entries => {
         for (const entry of entries) {
           // Make the root menu dropdown height the same height as the child menu if it resizes in anyway e.g. wraps on new lines, fontsize increase.
-          this.context.style.height = (entry.target as HTMLElement).offsetHeight + 'px';
+          const target = entry.target as HTMLElement;
+          this.context.style.height = `${target.offsetHeight}px`;
         }
       });
     }
@@ -233,10 +285,10 @@ export class Drilldown {
    */
   private getElementsToHideForMenuTransition(menu: HTMLElement): (HTMLElement | null)[] {
     const menuItems = this.getMenuListItems(menu);
-    const menuItemLinks = menuItems.map((item) => item.querySelector('[data-js-menu-link]') as HTMLElement | null);
+    const menuItemLinks = menuItems.map((item) => item.querySelector<HTMLElement>('[data-js-menu-link]'));
 
-    const backButton = menu.querySelector(`${this.options.backSelector}`) as HTMLElement | null;
-    const parentLink = menu.querySelector('[data-js-menu-parent]') as HTMLElement | null;
+    const backButton = menu.querySelector<HTMLElement>(this.options.backSelector);
+    const parentLink = menu.querySelector<HTMLElement>('[data-js-menu-parent]');
     const combinedMenuItems = [backButton, parentLink, ...menuItemLinks];
 
     return combinedMenuItems;
@@ -302,7 +354,7 @@ export class Drilldown {
 
     // We only need to set up a new resizeObserve for menus that are NOT the root menu because we need to tell
     // the root menu of content height changes.  The root menu isn't position:absolute so it will grow with the content.
-    if (targetMenu == this.context) {
+    if (targetMenu === this.context) {
       this.context.style.height = 'auto';
     } else {
       const menuResizeObserver = this.createMenuResizeObserver();
@@ -410,9 +462,8 @@ export class Drilldown {
    * @param context - The context within which to remove inline styles.
    */
   private removeInlineStyles(context: HTMLElement): void {
-
     // Create an array of child elements with inline styles as we might need to also add the context element
-    const elementsWithStyles = Array.from(context.querySelectorAll('[style]')) as HTMLElement[];
+    const elementsWithStyles = Array.from(context.querySelectorAll<HTMLElement>('[style]'));
 
     // Include the context element if it has inline styles
     if (context.hasAttribute('style')) {
@@ -447,9 +498,9 @@ export class Drilldown {
    * This method is typically called when the menu is being reset or destroyed.
    */
   private resetMenuListItems(): void {
-    const listItems = this.context.querySelectorAll(this.options.itemSelector);
+    const listItems = this.context.querySelectorAll<HTMLElement>(this.options.itemSelector);
     listItems.forEach((listItem) => {
-      (listItem as HTMLElement).classList.remove('hidden');
+      listItem.classList.remove('hidden');
     });
   }
 
@@ -485,3 +536,5 @@ export class Drilldown {
     this.reset();
   }
 }
+
+export { Drilldown, type DrilldownOptions, type TweenOptions, type TweenCallback };
