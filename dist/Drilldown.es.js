@@ -4,7 +4,7 @@ class H {
   /**
    * Initializes a new instance of the Drilldown class.
    * @param context - The element to initialize the drilldown on.
-   * @param options - Configuration options for the drilldown.
+   * @param options
    */
   constructor(t, e = {}) {
     var n, s, i, o, h, a, S, w, b, f, v, E, I, A, y, M, x, R, D, C;
@@ -135,7 +135,6 @@ class H {
   /**
    * Creates a ResizeObserver to adjust the height of the drilldown menu.
    * This ensures the menu height matches the content, especially useful when content changes size.
-   * @returns The created ResizeObserver instance.
    */
   createMenuResizeObserver() {
     return this.menuResizeObserver || (this.menuResizeObserver = new ResizeObserver((t) => {
@@ -149,7 +148,6 @@ class H {
    * Returns the main list items for a given menu. It does not include supplementary items, for
    * example, the parent link or the back button.
    * @param menu
-   * @returns Array of menu item elements
    */
   getMenuListItems(t) {
     const e = Array.from(t.children).filter((s) => s.matches("ul"))[0];
@@ -158,7 +156,6 @@ class H {
   /**
    * Returns the elements that will be hidden when a menu is transitioning.
    * @param menu
-   * @returns Array of elements to hide
    */
   getElementsToHideForMenuTransition(t) {
     const n = this.getMenuListItems(t).map((h) => h.querySelector("[data-js-menu-link]")), s = t.querySelector(this.options.backSelector), i = t.querySelector("[data-js-menu-parent]");
@@ -197,7 +194,6 @@ class H {
    * This method configures the animation sequence for transitioning to a submenu.
    * @param currentMenu - The currently active menu.
    * @param targetMenu - The submenu to be displayed.
-   * @returns The GSAP timeline for the animation.
    */
   onShowChildTween(t, e) {
     const n = e.offsetHeight, s = this.getElementsToHideForMenuTransition(t), i = this.getElementsToHideForMenuTransition(e), o = T.timeline();
@@ -242,7 +238,6 @@ class H {
    * Calculates the natural height of an element, disregarding any explicitly set heights.
    * This is useful for animations that need to adjust to the content's natural size.
    * @param element - The element to measure.
-   * @returns The natural height of the element.
    */
   getNaturalHeight(t) {
     const e = t.offsetHeight;
