@@ -117,11 +117,7 @@ menu.init();
 
 ## API
 
-### Constructor
-
-- `Drilldown(context, options = {})`: Initializes a new instance of the Drilldown class.
-  - `context`: The HTMLElement to initialize the drilldown on.
-  - `options`: Configuration options for the drilldown.
+See [documentation](./docs/README.md) for more detail on how to use the package.
 
 ### Options
 
