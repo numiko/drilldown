@@ -119,37 +119,7 @@ menu.init();
 
 See [documentation](./docs/README.md) for more detail on how to use the package.
 
-### Options
-
-Customizable options and their defaults are as follows:
-
-| Option | Description | Type | Default
-| --- | --- | --- | --- |
-| `backSelector` | Selector for back buttons. | `string` | `[data-js-menu-back]` |
-| `nextSelector` | Selector for next buttons. | `string` | `[data-js-menu-link-has-submenu]` |
-| `submenuSelector` | Selector for submenu containers. | `string` | `[data-js-menu-container]` |
-| `itemSelector` | Selector for menu items. | `string` | `[data-js-menu-item]` |
-| `childTween` | Configuration object to customize the tween for a child menu.  See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
-| `parentTween` | Configuration object to customize the tween for a parent menu. See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
-
-#### Customizing Tween
-
-Both the `childTween` and `parentTween` objects take the same customization options listed below
-
-| Option | Description | Type | Default
-| --- | --- | --- | --- |
-| `outDuration` | The tween duration when animating the current menu out | `function`  | `0.2`
-| `outEase` | The tween ease when animating the current menu out | `function`  | `'power1.out'`
-| `outStagger` | The tween stagger when animating the current menu out | `number` | `0` |
-| `inDuration` | The tween duration when animating the new menu in | `number` | `0.2` |
-| `inEase` | The tween ease when animating the new menu in | `string` | `'power1.out'` |
-| `inStagger` | The tween stagger when animating the new menu in | `number` | `0.1` |
-| `heightDuration` | The tween duration when animating the height of the drilldown menu | `number` | `0.3` |
-| `heightEase` | The tween ease when animating the height of the drilldown menu | `string` | `'power1.out'` |
-| `onStart` | Function to be called when the animation starts | `function` | `null` |
-| `onComplete` | Function to be called when the animation completes | `function` | `null` |
-
-#### Example
+### Customizing Tween Example
 ```JS
 const drilldownInstance = new Drilldown(context, {
   // tween specific options
@@ -186,14 +156,6 @@ const drilldownInstance = new Drilldown(context, {
     }
   }
 ```
-### Methods
-
-| Method | Description
-| --- | --- |
-| `init()` | Initalise the drilldown |
-| `reset()` | Resets the drilldown menu to its initial state. |
-| `destroy()` | Destroys drilldown. Cleans up event listeners and resets the menu. |
-
 
 ## Release notes
 
