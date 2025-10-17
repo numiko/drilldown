@@ -117,7 +117,7 @@ menu.init();
 
 ## API
 
-See [documentation](./docs/README.md) for more detail on how to use the package.
+See [documentation](https://numiko-drilldown.netlify.app/) for more detail on how to use the package.
 
 ### Customizing Tween Example
 ```JS
