@@ -18,7 +18,7 @@
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
-    "generate-docs": "typedoc lib/Drilldown.ts --plugin typedoc-plugin-markdown --mergeReadme true --readme none --plugin typedoc-plugin-mdn-links",
+    "generate-docs": "typedoc lib/Drilldown.ts",
     "release": "release-it"
   },
   "main": "./dist/Drilldown.umd.js",
@@ -49,8 +49,6 @@
     "happy-dom": "^15.7.4",
     "release-it": "^17.9.0",
     "typedoc": "^0.28.14",
-    "typedoc-plugin-markdown": "^4.9.0",
-    "typedoc-plugin-mdn-links": "^5.0.10",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.0",
     "vite": "^5.4.9",
