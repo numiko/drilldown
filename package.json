@@ -3,7 +3,7 @@
   "version": "1.2.1",
   "description": "A package to create a menu system enabling you to drilldown to deeper levels and navigate back up",
   "author": "Numiko",
-  "private": true,
+  "private": false,
   "license": "ISC",
   "homepage": "https://bitbucket.org/numiko/drilldown#readme",
   "repository": {
@@ -68,16 +68,22 @@
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
     "plugins": {
-          "@j-ulrich/release-it-regex-bumper": {
-            "out": [
-              {
-                "file": "README.md",
-                "search": "\\d+-\\d+-\\d+",
-                "replace": "{{major}}-{{minor}}-{{patch}}"
-              }
-            ]
+      "@j-ulrich/release-it-regex-bumper": {
+        "out": [
+          {
+            "file": "README.md",
+            "search": "\\d+-\\d+-\\d+",
+            "replace": "{{major}}-{{minor}}-{{patch}}"
           }
-        },
+        ]
+      }
+    },
+    "npm": {
+      "publish": true,
+      "publishArgs": [
+        "--access",
+        "public"
+      ]
     "hooks": {
       "before:init": [
         "vitest run"
