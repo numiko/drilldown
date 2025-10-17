@@ -84,6 +84,7 @@
         "--access",
         "public"
       ]
+    },
     "hooks": {
       "before:init": [
         "vitest run"
