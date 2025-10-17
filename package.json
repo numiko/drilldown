@@ -19,6 +19,7 @@
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
     "generate-docs": "typedoc lib/Drilldown.ts",
+    "deploy-docs": "netlify deploy --dir=docs --alias=v$(node -p \"require('./package.json').version\")",
     "release": "release-it"
   },
   "main": "./dist/Drilldown.umd.js",
@@ -37,6 +38,7 @@
     }
   },
   "devDependencies": {
+    "@j-ulrich/release-it-regex-bumper": "^5.3.0",
     "@eslint/js": "^9.37.0",
     "@stylistic/eslint-plugin": "^2.9.0",
     "@types/gsap": "^1.20.2",
@@ -65,13 +67,25 @@
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
+    "plugins": {
+          "@j-ulrich/release-it-regex-bumper": {
+            "out": [
+              {
+                "file": "README.md",
+                "search": "\\d+-\\d+-\\d+",
+                "replace": "{{major}}-{{minor}}-{{patch}}"
+              }
+            ]
+          }
+        },
     "hooks": {
       "before:init": [
         "vitest run"
       ],
       "after:bump": [
         "npm run generate-docs",
-        "npm run build"
+        "npm run build",
+        "npm run deploy-docs"
       ]
     }
   }
