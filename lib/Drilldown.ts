@@ -39,15 +39,15 @@ type DrilldownOptions = {
    */
   onReset?: (() => void) | null;
   /**
-   * Animation configuration for child menu transitions.
+   * Animation configuration (options) for child menu transitions.
    * Partial TweenOptions allowing selective override of default values.
    */
-  childTween?: Partial<TweenOptions>;
+  childTweenOptions?: Partial<TweenOptions>;
   /**
-   * Animation configuration for parent menu transitions.
+   * Animation configuration (options) for parent menu transitions.
    * Partial TweenOptions allowing selective override of default values.
    */
-  parentTween?: Partial<TweenOptions>;
+  parentTweenOptions?: Partial<TweenOptions>;
 };
 
 type ResolvedDrilldownOptions = {
@@ -76,6 +76,10 @@ class Drilldown {
     this.bindThisToMemberFunctions();
 
     this.context = context;
+
+    const childTweenOptions = options.childTweenOptions;
+    const parentTweenOptions = options.parentTweenOptions;
+
     this.options = {
       backSelector: options.backSelector || '[data-js-menu-back]',
       nextSelector: options.nextSelector || '[data-js-menu-next]',
@@ -83,28 +87,28 @@ class Drilldown {
       itemSelector: options.itemSelector || '[data-js-menu-item]',
       onReset: options.onReset || null,
       childTween: {
-        outDuration: options.childTween?.outDuration || DEFAULT_DURATION,
-        outEase: options.childTween?.outEase || DEFAULT_EASE,
-        outStagger: options.childTween?.outStagger || 0,
-        inDuration: options.childTween?.inDuration || DEFAULT_DURATION,
-        inEase: options.childTween?.inEase || DEFAULT_EASE,
-        inStagger: options.childTween?.inStagger || 0,
-        heightDuration: options.childTween?.heightDuration || DEFAULT_DURATION,
-        heightEase: options.childTween?.heightEase || DEFAULT_EASE,
-        onStart: options.childTween?.onStart || null,
-        onComplete: options.childTween?.onComplete || null,
+        outDuration: childTweenOptions?.outDuration || DEFAULT_DURATION,
+        outEase: childTweenOptions?.outEase || DEFAULT_EASE,
+        outStagger: childTweenOptions?.outStagger || 0,
+        inDuration: childTweenOptions?.inDuration || DEFAULT_DURATION,
+        inEase: childTweenOptions?.inEase || DEFAULT_EASE,
+        inStagger: childTweenOptions?.inStagger || 0,
+        heightDuration: childTweenOptions?.heightDuration || DEFAULT_DURATION,
+        heightEase: childTweenOptions?.heightEase || DEFAULT_EASE,
+        onStart: childTweenOptions?.onStart || null,
+        onComplete: childTweenOptions?.onComplete || null,
       },
       parentTween: {
-        outDuration: options.parentTween?.outDuration || DEFAULT_DURATION,
-        outEase: options.parentTween?.outEase || DEFAULT_EASE,
-        outStagger: options.parentTween?.outStagger || 0,
-        inDuration: options.parentTween?.inDuration || DEFAULT_DURATION,
-        inEase: options.parentTween?.inEase || DEFAULT_EASE,
-        inStagger: options.parentTween?.inStagger || 0,
-        heightDuration: options.parentTween?.heightDuration || DEFAULT_DURATION,
-        heightEase: options.parentTween?.heightEase || DEFAULT_EASE,
-        onStart: options.parentTween?.onStart || null,
-        onComplete: options.parentTween?.onComplete || null,
+        outDuration: parentTweenOptions?.outDuration || DEFAULT_DURATION,
+        outEase: parentTweenOptions?.outEase || DEFAULT_EASE,
+        outStagger: parentTweenOptions?.outStagger || 0,
+        inDuration: parentTweenOptions?.inDuration || DEFAULT_DURATION,
+        inEase: parentTweenOptions?.inEase || DEFAULT_EASE,
+        inStagger: parentTweenOptions?.inStagger || 0,
+        heightDuration: parentTweenOptions?.heightDuration || DEFAULT_DURATION,
+        heightEase: parentTweenOptions?.heightEase || DEFAULT_EASE,
+        onStart: parentTweenOptions?.onStart || null,
+        onComplete: parentTweenOptions?.onComplete || null,
       }
     };
 

@@ -107,7 +107,7 @@ describe('Drilldown initialisation', () => {
     expect(drilldown.options.itemSelector).toBe('[data-js-item-selector]');
   });
 
-  it('should correctly initialize with custom childTween options', () => {
+  it('should correctly initialize with custom childTweenOptions options', () => {
     const menuElement = document.getElementById('menu');
     const IN_DURATION = 0.5;
     const OUT_DURATION = 0.5;
@@ -117,7 +117,7 @@ describe('Drilldown initialisation', () => {
     const OUT_STAGGER = 0.1;
 
     drilldown = new Drilldown(menuElement, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.5,
         outDuration: 0.5,
         inEase: 'power2.in',
@@ -135,7 +135,7 @@ describe('Drilldown initialisation', () => {
     expect(drilldown.options.childTween.outStagger).toBe(OUT_STAGGER);
   });
 
-  it('should correctly initialize with custom parentTween options', () => {
+  it('should correctly initialize with custom parentTweenOptions options', () => {
     const menuElement = document.getElementById('menu');
     const IN_DURATION = 0.5;
     const OUT_DURATION = 0.5;
@@ -145,7 +145,7 @@ describe('Drilldown initialisation', () => {
     const OUT_STAGGER = 0.1;
 
     drilldown = new Drilldown(menuElement, {
-      parentTween: {
+      parentTweenOptions: {
         inDuration: 0.5,
         outDuration: 0.5,
         inEase: 'power2.in',
@@ -168,7 +168,7 @@ describe('Interacting with the menu', () => {
   it('should reveal a submenu when a link is clicked that has a submenu', async () => {
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       },
@@ -195,11 +195,11 @@ describe('Interacting with the menu', () => {
   it('should reveal a parent menu when a link is clicked that has a parent menu', async () => {
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       },
-      parentTween: {
+      parentTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       },
@@ -241,7 +241,7 @@ describe('Interacting with the menu', () => {
   it('should add a `hidden` class to parent `li` items when showing a child menu', async () => {
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       }
@@ -263,7 +263,7 @@ describe('Interacting with the menu', () => {
   it('should remove inline styles on root menu and all children when reset', async () => {
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       },
@@ -292,7 +292,7 @@ describe('When callbacks are utilised', () => {
     const submenuToBeRevealed = document.querySelector('[data-js-menu-container-level="1"]');
     const topLevelMenu = document.querySelector('[data-js-menu-container-level="0"]');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
         onStart: onStartCallback
@@ -315,7 +315,7 @@ describe('When callbacks are utilised', () => {
     const submenuToBeRevealed = document.querySelector('[data-js-menu-container-level="1"]');
     const topLevelMenu = document.querySelector('[data-js-menu-container-level="0"]');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
         onComplete: onCompleteCallback
@@ -338,11 +338,11 @@ describe('When callbacks are utilised', () => {
     const submenuToBeRevealed = document.querySelector('[data-js-menu-container-level="1"]');
     const topLevelMenu = document.querySelector('[data-js-menu-container-level="0"]');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       },
-      parentTween: {
+      parentTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
         onStart: onStartCallback
@@ -370,11 +370,11 @@ describe('When callbacks are utilised', () => {
     const submenuToBeRevealed = document.querySelector('[data-js-menu-container-level="1"]');
     const topLevelMenu = document.querySelector('[data-js-menu-container-level="0"]');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       },
-      parentTween: {
+      parentTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
         onComplete: onCompleteCallback
@@ -443,11 +443,11 @@ describe('When the menu is resized', () => {
 
     const menu = document.getElementById('menu');
     const drilldown = new Drilldown(menu, {
-      childTween: {
+      childTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       },
-      parentTween: {
+      parentTweenOptions: {
         inDuration: 0.01,
         outDuration: 0.01,
       }

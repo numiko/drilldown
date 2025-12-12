@@ -7,7 +7,7 @@ export declare class Drilldown {
     /**
      * Initializes a new instance of the Drilldown class.
      * @param context - The element to initialize the drilldown on.
-     * @param options - Configuration options for the drilldown.
+     * @param options
      */
     constructor(context: HTMLElement, options?: DrilldownOptions);
     /**
@@ -20,8 +20,6 @@ export declare class Drilldown {
      * and initiates the appropriate animation to transition between menus.
      * This function prevents navigation if animations are currently running or if navigation is disabled.
      * It also ensures that the default action for the click event is prevented.
-     *
-     * @param e - The mouse event triggered by clicking on a menu item.
      */
     private handleMenuClick;
     /**
@@ -59,20 +57,17 @@ export declare class Drilldown {
     /**
      * Creates a ResizeObserver to adjust the height of the drilldown menu.
      * This ensures the menu height matches the content, especially useful when content changes size.
-     * @returns The created ResizeObserver instance.
      */
     private createMenuResizeObserver;
     /**
      * Returns the main list items for a given menu. It does not include supplementary items, for
      * example, the parent link or the back button.
      * @param menu
-     * @returns Array of menu item elements
      */
     private getMenuListItems;
     /**
      * Returns the elements that will be hidden when a menu is transitioning.
      * @param menu
-     * @returns Array of elements to hide
      */
     private getElementsToHideForMenuTransition;
     /**
@@ -96,7 +91,6 @@ export declare class Drilldown {
      * This method configures the animation sequence for transitioning to a submenu.
      * @param currentMenu - The currently active menu.
      * @param targetMenu - The submenu to be displayed.
-     * @returns The GSAP timeline for the animation.
      */
     private onShowChildTween;
     /**
@@ -104,7 +98,6 @@ export declare class Drilldown {
      * This method configures the animation sequence for transitioning back to a parent menu.
      * @param currentMenu - The currently active submenu.
      * @param targetMenu - The parent menu to be displayed.
-     * @returns The GSAP timeline for the animation.
      */
     private onShowParentTween;
     /**
@@ -117,7 +110,6 @@ export declare class Drilldown {
      * Calculates the natural height of an element, disregarding any explicitly set heights.
      * This is useful for animations that need to adjust to the content's natural size.
      * @param element - The element to measure.
-     * @returns The natural height of the element.
      */
     private getNaturalHeight;
     /**
@@ -152,26 +144,19 @@ export declare type DrilldownOptions = {
      */
     onReset?: (() => void) | null;
     /**
-     * Animation configuration for child menu transitions.
+     * Animation configuration (options) for child menu transitions.
      * Partial TweenOptions allowing selective override of default values.
      */
-    childTween?: Partial<TweenOptions>;
+    childTweenOptions?: Partial<TweenOptions>;
     /**
-     * Animation configuration for parent menu transitions.
+     * Animation configuration (options) for parent menu transitions.
      * Partial TweenOptions allowing selective override of default values.
      */
-    parentTween?: Partial<TweenOptions>;
+    parentTweenOptions?: Partial<TweenOptions>;
 };
 
-/**
- * Callback function type for tween animations.
- */
 export declare type TweenCallback = (currentMenu: HTMLElement, targetMenu: HTMLElement) => void;
 
-/**
- * Configuration options for GSAP tween animations used in menu transitions.
- * Controls the timing, easing, and callbacks for both outbound and inbound animations.
- */
 export declare type TweenOptions = {
     outDuration: number;
     outEase: string;
