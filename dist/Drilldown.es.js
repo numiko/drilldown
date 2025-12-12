@@ -22,23 +22,23 @@ class f {
       return h.to(a, {
         x: 20,
         autoAlpha: 0,
-        duration: this.options.parentTween.outDuration,
-        ease: this.options.parentTween.outEase,
-        stagger: this.options.parentTween.outStagger
+        duration: this.options.parentTweenOptions.outDuration,
+        ease: this.options.parentTweenOptions.outEase,
+        stagger: this.options.parentTweenOptions.outStagger
       }), h.to(this.context, {
         // This is calculated at runtime because the height of the parent menu changes
         // just before we animate it in: see the 'onShowParentStart' callback.
         height: () => `${this.getNaturalHeight(n)}px`,
-        duration: this.options.parentTween.heightDuration,
-        ease: this.options.parentTween.heightEase
+        duration: this.options.parentTweenOptions.heightDuration,
+        ease: this.options.parentTweenOptions.heightEase
       }), h.set(o, {
         autoAlpha: 0
       }), h.to(r, {
         autoAlpha: 1,
         x: 0,
-        duration: this.options.parentTween.inDuration,
-        ease: this.options.parentTween.inEase,
-        stagger: this.options.parentTween.inStagger
+        duration: this.options.parentTweenOptions.inDuration,
+        ease: this.options.parentTweenOptions.inEase,
+        stagger: this.options.parentTweenOptions.inStagger
       }), h;
     }, this.bindThisToMemberFunctions(), this.context = i;
     const t = s.childTweenOptions, e = s.parentTweenOptions;
@@ -48,7 +48,7 @@ class f {
       submenuSelector: s.submenuSelector || "[data-js-menu-container]",
       itemSelector: s.itemSelector || "[data-js-menu-item]",
       onReset: s.onReset || null,
-      childTween: {
+      childTweenOptions: {
         outDuration: (t == null ? void 0 : t.outDuration) || u,
         outEase: (t == null ? void 0 : t.outEase) || l,
         outStagger: (t == null ? void 0 : t.outStagger) || 0,
@@ -60,7 +60,7 @@ class f {
         onStart: (t == null ? void 0 : t.onStart) || null,
         onComplete: (t == null ? void 0 : t.onComplete) || null
       },
-      parentTween: {
+      parentTweenOptions: {
         outDuration: (e == null ? void 0 : e.outDuration) || u,
         outEase: (e == null ? void 0 : e.outEase) || l,
         outStagger: (e == null ? void 0 : e.outStagger) || 0,
@@ -124,7 +124,7 @@ class f {
    * @param isChild - Flag to determine if the animation is for showing a child menu (true) or a parent menu (false).
    */
   setupTweenCallbacks(i, s, t, e) {
-    const o = e ? this.options.childTween : this.options.parentTween, n = e ? this.onShowChildStart : this.onShowParentStart, r = e ? this.onShowChildComplete : this.onShowParentComplete;
+    const o = e ? this.options.childTweenOptions : this.options.parentTweenOptions, n = e ? this.onShowChildStart : this.onShowParentStart, r = e ? this.onShowChildComplete : this.onShowParentComplete;
     i.eventCallback("onStart", () => {
       var a;
       (a = o.onStart) == null || a.call(o, s, t), n(s, t);
@@ -201,13 +201,13 @@ class f {
     return n.to(e, {
       autoAlpha: 0,
       x: -20,
-      duration: this.options.childTween.outDuration,
-      ease: this.options.childTween.outEase,
-      stagger: this.options.childTween.outStagger
+      duration: this.options.childTweenOptions.outDuration,
+      ease: this.options.childTweenOptions.outEase,
+      stagger: this.options.childTweenOptions.outStagger
     }), n.to(this.context, {
       height: `${t}px`,
-      duration: this.options.childTween.heightDuration,
-      ease: this.options.childTween.heightEase
+      duration: this.options.childTweenOptions.heightDuration,
+      ease: this.options.childTweenOptions.heightEase
     }), n.set(s, {
       autoAlpha: 1
     }), n.fromTo(o, {
@@ -216,9 +216,9 @@ class f {
     }, {
       autoAlpha: 1,
       x: 0,
-      duration: this.options.childTween.inDuration,
-      ease: this.options.childTween.inEase,
-      stagger: this.options.childTween.inStagger
+      duration: this.options.childTweenOptions.inDuration,
+      ease: this.options.childTweenOptions.inEase,
+      stagger: this.options.childTweenOptions.inStagger
     }), n;
   }
   /**

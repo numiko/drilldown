@@ -78,18 +78,18 @@ describe('Drilldown initialisation', () => {
     expect(drilldown.options.nextSelector).toBe('[data-js-menu-next]');
     expect(drilldown.options.submenuSelector).toBe('[data-js-menu-container]');
     expect(drilldown.options.itemSelector).toBe('[data-js-menu-item]');
-    expect(drilldown.options.childTween.outDuration).toBe(DEFAULT_DURATION);
-    expect(drilldown.options.childTween.inDuration).toBe(DEFAULT_DURATION);
-    expect(drilldown.options.childTween.outEase).toBe(DEFAULT_EASE);
-    expect(drilldown.options.childTween.inEase).toBe(DEFAULT_EASE);
-    expect(drilldown.options.childTween.inStagger).toBe(DEFAULT_STAGGER);
-    expect(drilldown.options.childTween.outStagger).toBe(DEFAULT_STAGGER);
-    expect(drilldown.options.parentTween.outDuration).toBe(DEFAULT_DURATION);
-    expect(drilldown.options.parentTween.inDuration).toBe(DEFAULT_DURATION);
-    expect(drilldown.options.parentTween.outEase).toBe(DEFAULT_EASE);
-    expect(drilldown.options.parentTween.inEase).toBe(DEFAULT_EASE);
-    expect(drilldown.options.parentTween.inStagger).toBe(DEFAULT_STAGGER);
-    expect(drilldown.options.parentTween.outStagger).toBe(DEFAULT_STAGGER);
+    expect(drilldown.options.childTweenOptions.outDuration).toBe(DEFAULT_DURATION);
+    expect(drilldown.options.childTweenOptions.inDuration).toBe(DEFAULT_DURATION);
+    expect(drilldown.options.childTweenOptions.outEase).toBe(DEFAULT_EASE);
+    expect(drilldown.options.childTweenOptions.inEase).toBe(DEFAULT_EASE);
+    expect(drilldown.options.childTweenOptions.inStagger).toBe(DEFAULT_STAGGER);
+    expect(drilldown.options.childTweenOptions.outStagger).toBe(DEFAULT_STAGGER);
+    expect(drilldown.options.parentTweenOptions.outDuration).toBe(DEFAULT_DURATION);
+    expect(drilldown.options.parentTweenOptions.inDuration).toBe(DEFAULT_DURATION);
+    expect(drilldown.options.parentTweenOptions.outEase).toBe(DEFAULT_EASE);
+    expect(drilldown.options.parentTweenOptions.inEase).toBe(DEFAULT_EASE);
+    expect(drilldown.options.parentTweenOptions.inStagger).toBe(DEFAULT_STAGGER);
+    expect(drilldown.options.parentTweenOptions.outStagger).toBe(DEFAULT_STAGGER);
   });
 
   it('should correctly initialize with custom selectors', () => {
@@ -127,12 +127,12 @@ describe('Drilldown initialisation', () => {
       },
     });
 
-    expect(drilldown.options.childTween.outDuration).toBe(IN_DURATION);
-    expect(drilldown.options.childTween.inDuration).toBe(OUT_DURATION);
-    expect(drilldown.options.childTween.outEase).toBe(OUT_EASE);
-    expect(drilldown.options.childTween.inEase).toBe(IN_EASE);
-    expect(drilldown.options.childTween.inStagger).toBe(IN_STAGGER);
-    expect(drilldown.options.childTween.outStagger).toBe(OUT_STAGGER);
+    expect(drilldown.options.childTweenOptions.outDuration).toBe(IN_DURATION);
+    expect(drilldown.options.childTweenOptions.inDuration).toBe(OUT_DURATION);
+    expect(drilldown.options.childTweenOptions.outEase).toBe(OUT_EASE);
+    expect(drilldown.options.childTweenOptions.inEase).toBe(IN_EASE);
+    expect(drilldown.options.childTweenOptions.inStagger).toBe(IN_STAGGER);
+    expect(drilldown.options.childTweenOptions.outStagger).toBe(OUT_STAGGER);
   });
 
   it('should correctly initialize with custom parentTweenOptions options', () => {
@@ -155,12 +155,12 @@ describe('Drilldown initialisation', () => {
       },
     });
 
-    expect(drilldown.options.parentTween.outDuration).toBe(IN_DURATION);
-    expect(drilldown.options.parentTween.inDuration).toBe(OUT_DURATION);
-    expect(drilldown.options.parentTween.outEase).toBe(OUT_EASE);
-    expect(drilldown.options.parentTween.inEase).toBe(IN_EASE);
-    expect(drilldown.options.parentTween.inStagger).toBe(IN_STAGGER);
-    expect(drilldown.options.parentTween.outStagger).toBe(OUT_STAGGER);
+    expect(drilldown.options.parentTweenOptions.outDuration).toBe(IN_DURATION);
+    expect(drilldown.options.parentTweenOptions.inDuration).toBe(OUT_DURATION);
+    expect(drilldown.options.parentTweenOptions.outEase).toBe(OUT_EASE);
+    expect(drilldown.options.parentTweenOptions.inEase).toBe(IN_EASE);
+    expect(drilldown.options.parentTweenOptions.inStagger).toBe(IN_STAGGER);
+    expect(drilldown.options.parentTweenOptions.outStagger).toBe(OUT_STAGGER);
   });
 });
 

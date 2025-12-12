@@ -56,8 +56,8 @@ type ResolvedDrilldownOptions = {
   readonly submenuSelector: string;
   readonly itemSelector: string;
   readonly onReset: (() => void) | null;
-  readonly childTween: TweenOptions;
-  readonly parentTween: TweenOptions;
+  readonly childTweenOptions: TweenOptions;
+  readonly parentTweenOptions: TweenOptions;
 };
 
 class Drilldown {
@@ -86,7 +86,7 @@ class Drilldown {
       submenuSelector: options.submenuSelector || '[data-js-menu-container]',
       itemSelector: options.itemSelector || '[data-js-menu-item]',
       onReset: options.onReset || null,
-      childTween: {
+      childTweenOptions: {
         outDuration: childTweenOptions?.outDuration || DEFAULT_DURATION,
         outEase: childTweenOptions?.outEase || DEFAULT_EASE,
         outStagger: childTweenOptions?.outStagger || 0,
@@ -98,7 +98,7 @@ class Drilldown {
         onStart: childTweenOptions?.onStart || null,
         onComplete: childTweenOptions?.onComplete || null,
       },
-      parentTween: {
+      parentTweenOptions: {
         outDuration: parentTweenOptions?.outDuration || DEFAULT_DURATION,
         outEase: parentTweenOptions?.outEase || DEFAULT_EASE,
         outStagger: parentTweenOptions?.outStagger || 0,
@@ -219,7 +219,7 @@ class Drilldown {
    * @param isChild - Flag to determine if the animation is for showing a child menu (true) or a parent menu (false).
    */
   private setupTweenCallbacks(tween: gsap.core.Timeline, currentMenu: HTMLElement, targetMenu: HTMLElement, isChild: boolean): void {
-    const tweenOptions = isChild ? this.options.childTween : this.options.parentTween;
+    const tweenOptions = isChild ? this.options.childTweenOptions : this.options.parentTweenOptions;
     const onShowStart = isChild ? this.onShowChildStart : this.onShowParentStart;
     const onShowComplete = isChild ? this.onShowChildComplete : this.onShowParentComplete;
 
@@ -365,15 +365,15 @@ class Drilldown {
     tl.to(currentMenuItems, {
       autoAlpha: 0,
       x: -20,
-      duration: this.options.childTween.outDuration,
-      ease: this.options.childTween.outEase,
-      stagger: this.options.childTween.outStagger,
+      duration: this.options.childTweenOptions.outDuration,
+      ease: this.options.childTweenOptions.outEase,
+      stagger: this.options.childTweenOptions.outStagger,
     });
 
     tl.to(this.context, {
       height: `${submenuHeight}px`,
-      duration: this.options.childTween.heightDuration,
-      ease: this.options.childTween.heightEase,
+      duration: this.options.childTweenOptions.heightDuration,
+      ease: this.options.childTweenOptions.heightEase,
     });
 
     tl.set(targetMenu, {
@@ -386,9 +386,9 @@ class Drilldown {
     }, {
       autoAlpha: 1,
       x: 0,
-      duration: this.options.childTween.inDuration,
-      ease: this.options.childTween.inEase,
-      stagger: this.options.childTween.inStagger,
+      duration: this.options.childTweenOptions.inDuration,
+      ease: this.options.childTweenOptions.inEase,
+      stagger: this.options.childTweenOptions.inStagger,
     });
 
     return tl;
@@ -409,9 +409,9 @@ class Drilldown {
     tl.to(currentMenuItems, {
       x: 20,
       autoAlpha: 0,
-      duration: this.options.parentTween.outDuration,
-      ease: this.options.parentTween.outEase,
-      stagger: this.options.parentTween.outStagger,
+      duration: this.options.parentTweenOptions.outDuration,
+      ease: this.options.parentTweenOptions.outEase,
+      stagger: this.options.parentTweenOptions.outStagger,
     });
 
     tl.to(this.context, {
@@ -423,8 +423,8 @@ class Drilldown {
         const naturalHeight = this.getNaturalHeight(targetMenu);
         return `${naturalHeight}px`;
       },
-      duration: this.options.parentTween.heightDuration,
-      ease: this.options.parentTween.heightEase,
+      duration: this.options.parentTweenOptions.heightDuration,
+      ease: this.options.parentTweenOptions.heightEase,
     });
 
     tl.set(currentMenu, {
@@ -434,9 +434,9 @@ class Drilldown {
     tl.to(parentMenuItems, {
       autoAlpha: 1,
       x: 0,
-      duration: this.options.parentTween.inDuration,
-      ease: this.options.parentTween.inEase,
-      stagger: this.options.parentTween.inStagger,
+      duration: this.options.parentTweenOptions.inDuration,
+      ease: this.options.parentTweenOptions.inEase,
+      stagger: this.options.parentTweenOptions.inStagger,
     });
 
     return tl;
