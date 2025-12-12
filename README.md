@@ -120,10 +120,45 @@ menu.init();
 See [documentation](https://v1-2-1--numiko-drilldown.netlify.app/) for more detail on how to use the package.
 
 ### Customizing Tween Example
+- `Drilldown(context, options = {})`: Initializes a new instance of the Drilldown class.
+  - `context`: The HTMLElement to initialize the drilldown on.
+  - `options`: Configuration options for the drilldown.
+
+### Options
+
+Customizable options and their defaults are as follows:
+
+| Option | Description | Type | Default
+| --- | --- | --- | --- |
+| `backSelector` | Selector for back buttons. | `string` | `[data-js-menu-back]` |
+| `nextSelector` | Selector for next buttons. | `string` | `[data-js-menu-link-has-submenu]` |
+| `submenuSelector` | Selector for submenu containers. | `string` | `[data-js-menu-container]` |
+| `itemSelector` | Selector for menu items. | `string` | `[data-js-menu-item]` |
+| `childTweenOptions` | Configuration options to customize the tween for a child menu. See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
+| `parentTweenOptions` | Configuration options to customize the tween for a parent menu. See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
+
+#### Customizing Tween
+
+Both the `childTweenOptions` and `parentTweenOptions` objects take the same customization options listed below.
+
+| Option | Description | Type | Default
+| --- | --- | --- | --- |
+| `outDuration` | The tween duration when animating the current menu out | `function`  | `0.2`
+| `outEase` | The tween ease when animating the current menu out | `function`  | `'power1.out'`
+| `outStagger` | The tween stagger when animating the current menu out | `number` | `0` |
+| `inDuration` | The tween duration when animating the new menu in | `number` | `0.2` |
+| `inEase` | The tween ease when animating the new menu in | `string` | `'power1.out'` |
+| `inStagger` | The tween stagger when animating the new menu in | `number` | `0.1` |
+| `heightDuration` | The tween duration when animating the height of the drilldown menu | `number` | `0.3` |
+| `heightEase` | The tween ease when animating the height of the drilldown menu | `string` | `'power1.out'` |
+| `onStart` | Function to be called when the animation starts | `function` | `null` |
+| `onComplete` | Function to be called when the animation completes | `function` | `null` |
+
+#### Example
 ```JS
 const drilldownInstance = new Drilldown(context, {
   // tween specific options
-  childTween: {
+  childTweenOptions: {
     outDuration: 0.2,
     outEase: 'power1.out',
     outStagger: 0,
@@ -139,7 +174,7 @@ const drilldownInstance = new Drilldown(context, {
       console.log('child menu entered');
     }
   },
-  parentTween: {
+  parentTweenOptions: {
     outDuration: 0.2,
     outEase: 'power1.out',
     outStagger: 0,

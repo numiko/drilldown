@@ -144,15 +144,15 @@ export declare type DrilldownOptions = {
      */
     onReset?: (() => void) | null;
     /**
-     * Animation configuration for child menu transitions.
+     * Animation configuration (options) for child menu transitions.
      * Partial TweenOptions allowing selective override of default values.
      */
-    childTween?: Partial<TweenOptions>;
+    childTweenOptions?: Partial<TweenOptions>;
     /**
-     * Animation configuration for parent menu transitions.
+     * Animation configuration (options) for parent menu transitions.
      * Partial TweenOptions allowing selective override of default values.
      */
-    parentTween?: Partial<TweenOptions>;
+    parentTweenOptions?: Partial<TweenOptions>;
 };
 
 export declare type TweenCallback = (currentMenu: HTMLElement, targetMenu: HTMLElement) => void;
