@@ -117,8 +117,9 @@ menu.init();
 
 ## API
 
-### Constructor
+See [documentation](https://v1-2-1--numiko-drilldown.netlify.app/) for more detail on how to use the package.
 
+### Customizing Tween Example
 - `Drilldown(context, options = {})`: Initializes a new instance of the Drilldown class.
   - `context`: The HTMLElement to initialize the drilldown on.
   - `options`: Configuration options for the drilldown.
@@ -190,14 +191,6 @@ const drilldownInstance = new Drilldown(context, {
     }
   }
 ```
-### Methods
-
-| Method | Description
-| --- | --- |
-| `init()` | Initalise the drilldown |
-| `reset()` | Resets the drilldown menu to its initial state. |
-| `destroy()` | Destroys drilldown. Cleans up event listeners and resets the menu. |
-
 
 ## Release notes
 

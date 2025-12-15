@@ -7,11 +7,11 @@ export default defineConfig({
   plugins: [
     eslint(),
     dts({
-      exclude: ['**/*.d.ts', 'node_modules', 'dist'],
+      outDir: 'dist',
+      rollupTypes: true,
+
+      // Treat listed dependencies as external deps, excluded from .d.ts files
       external: ['gsap'],
-      skipDiagnostics: true,
-      tsconfigPath: './tsconfig.dts.json',
-      rollupTypes: true
     })
   ],
   server: {
