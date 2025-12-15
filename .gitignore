@@ -10,7 +10,7 @@ lerna-debug.log*
 node_modules
 dist-ssr
 *.local
-coverage/*
+docs/
 
 coverage/*
 
@@ -27,3 +27,6 @@ coverage/*
 
 # Ignore test reports
 reports/
+
+# Local Netlify folder
+.netlify
