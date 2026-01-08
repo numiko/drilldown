@@ -113,8 +113,15 @@ menu.init();
   </ul>
 </div>
 ```
+## API
+
+See [documentation](https://v2-0-0--numiko-drilldown.netlify.app/) for more detail on how to use the package.
 
 ## Release notes
+
+### v2.0.0
+
+- Full TypeScript integration
 
 ### v1.0.0
 
