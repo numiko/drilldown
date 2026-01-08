@@ -27,21 +27,21 @@ The Drilldown Package provides an easy-to-use solution for creating animated, hi
 
 ## Installation
 
-You then install this package choosing the latest tag.
+Install from npm:
 
 ```shell
-npm install ssh://git@bitbucket.org:numiko/drilldown.git#<TAG_NAME>
+npm install @numiko/drilldown
 ```
 
 ## Usage
 
 ### JS initialisation
 
-```JS
-import { Drilldown } from './path/to/Drilldown.js';
+```ts
+import { Drilldown, type DrilldownOptions } from '@numiko/drilldown';
 
-const menuElement = document.getElementById('menu');
-const options = {
+const menuElement = document.getElementById('menu') as HTMLElement;
+const options: DrilldownOptions = {
   backSelector: '[data-js-menu-back]',
   nextSelector: '[data-js-menu-next]',
   submenuSelector: '[data-js-menu-container]',
@@ -70,7 +70,7 @@ menu.init();
             <span>Top level 2 &raquo;</span>
         </button>
         <div id="menu_1" class="invisible absolute z-10 w-full top-0" data-js-menu-container data-js-menu-container-level="1">
-            <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" data-js-menu-back>
+            <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" type="button" data-js-menu-back>
               <span> &laquo; Go back</span>
             </button>
             <div>
@@ -87,7 +87,7 @@ menu.init();
                   <span>Second level 2 &raquo;</span>
                 </button>
                 <div id="menu_2" class="invisible absolute z-10 w-full top-0" data-js-menu-container data-js-menu-container-level="2">
-                  <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" data-js-menu-back>
+                  <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" type="button" data-js-menu-back>
                       <span>&laquo; Go back</span>
                   </button>
                   <div>
@@ -131,7 +131,7 @@ Customizable options and their defaults are as follows:
 | Option | Description | Type | Default
 | --- | --- | --- | --- |
 | `backSelector` | Selector for back buttons. | `string` | `[data-js-menu-back]` |
-| `nextSelector` | Selector for next buttons. | `string` | `[data-js-menu-link-has-submenu]` |
+| `nextSelector` | Selector for next buttons. | `string` | `[data-js-menu-next]` |
 | `submenuSelector` | Selector for submenu containers. | `string` | `[data-js-menu-container]` |
 | `itemSelector` | Selector for menu items. | `string` | `[data-js-menu-item]` |
 | `childTweenOptions` | Configuration options to customize the tween for a child menu. See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
@@ -143,8 +143,8 @@ Both the `childTweenOptions` and `parentTweenOptions` objects take the same cust
 
 | Option | Description | Type | Default
 | --- | --- | --- | --- |
-| `outDuration` | The tween duration when animating the current menu out | `function`  | `0.2`
-| `outEase` | The tween ease when animating the current menu out | `function`  | `'power1.out'`
+| `outDuration` | The tween duration when animating the current menu out | `number`  | `0.2`
+| `outEase` | The tween ease when animating the current menu out | `string`  | `'power1.out'`
 | `outStagger` | The tween stagger when animating the current menu out | `number` | `0` |
 | `inDuration` | The tween duration when animating the new menu in | `number` | `0.2` |
 | `inEase` | The tween ease when animating the new menu in | `string` | `'power1.out'` |
@@ -155,7 +155,9 @@ Both the `childTweenOptions` and `parentTweenOptions` objects take the same cust
 | `onComplete` | Function to be called when the animation completes | `function` | `null` |
 
 #### Example
-```JS
+```ts
+import { Drilldown } from '@numiko/drilldown';
+
 const drilldownInstance = new Drilldown(context, {
   // tween specific options
   childTweenOptions: {
@@ -190,6 +192,7 @@ const drilldownInstance = new Drilldown(context, {
       console.log('parent menu entered');
     }
   }
+});
 ```
 
 ## Release notes
