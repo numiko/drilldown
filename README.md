@@ -115,7 +115,7 @@ menu.init();
 ```
 ## API
 
-See [documentation](https://v2-0-0--numiko-drilldown.netlify.app/) for more detail on how to use the package.
+See [documentation](https://v2-0-1--numiko-drilldown.netlify.app/) for more detail on how to use the package.
 
 ## Release notes
 
