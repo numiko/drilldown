@@ -31,7 +31,7 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/Drilldown.d.ts",
+        "types": "./dist/Drilldown.es.d.ts",
         "module": "./dist/Drilldown.es.js"
       },
       "require": "./dist/Drilldown.umd.js"
@@ -49,7 +49,7 @@
     "eslint": "^9.38.0",
     "globals": "^15.11.0",
     "happy-dom": "^20.0.11",
-    "netlify-cli": "^23.9.5",
+    "netlify-cli": "^23.13.3",
     "release-it": "^19.0.5",
     "typedoc": "^0.28.14",
     "typescript": "^5.9.3",
