@@ -27,21 +27,21 @@ The Drilldown Package provides an easy-to-use solution for creating animated, hi
 
 ## Installation
 
-You then install this package choosing the latest tag.
+Install from npm:
 
 ```shell
-npm install ssh://git@bitbucket.org:numiko/drilldown.git#<TAG_NAME>
+npm install @numiko/drilldown
 ```
 
 ## Usage
 
 ### JS initialisation
 
-```JS
-import { Drilldown } from './path/to/Drilldown.js';
+```ts
+import { Drilldown, type DrilldownOptions } from '@numiko/drilldown';
 
-const menuElement = document.getElementById('menu');
-const options = {
+const menuElement = document.getElementById('menu') as HTMLElement;
+const options: DrilldownOptions = {
   backSelector: '[data-js-menu-back]',
   nextSelector: '[data-js-menu-next]',
   submenuSelector: '[data-js-menu-container]',
@@ -70,7 +70,7 @@ menu.init();
             <span>Top level 2 &raquo;</span>
         </button>
         <div id="menu_1" class="invisible absolute z-10 w-full top-0" data-js-menu-container data-js-menu-container-level="1">
-            <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" data-js-menu-back>
+            <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" type="button" data-js-menu-back>
               <span> &laquo; Go back</span>
             </button>
             <div>
@@ -87,7 +87,7 @@ menu.init();
                   <span>Second level 2 &raquo;</span>
                 </button>
                 <div id="menu_2" class="invisible absolute z-10 w-full top-0" data-js-menu-container data-js-menu-container-level="2">
-                  <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" data-js-menu-back>
+                  <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" type="button" data-js-menu-back>
                       <span>&laquo; Go back</span>
                   </button>
                   <div>
@@ -113,91 +113,6 @@ menu.init();
   </ul>
 </div>
 ```
-
-
-## API
-
-### Constructor
-
-- `Drilldown(context, options = {})`: Initializes a new instance of the Drilldown class.
-  - `context`: The HTMLElement to initialize the drilldown on.
-  - `options`: Configuration options for the drilldown.
-
-### Options
-
-Customizable options and their defaults are as follows:
-
-| Option | Description | Type | Default
-| --- | --- | --- | --- |
-| `backSelector` | Selector for back buttons. | `string` | `[data-js-menu-back]` |
-| `nextSelector` | Selector for next buttons. | `string` | `[data-js-menu-link-has-submenu]` |
-| `submenuSelector` | Selector for submenu containers. | `string` | `[data-js-menu-container]` |
-| `itemSelector` | Selector for menu items. | `string` | `[data-js-menu-item]` |
-| `childTween` | Configuration object to customize the tween for a child menu.  See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
-| `parentTween` | Configuration object to customize the tween for a parent menu. See [Customizing Tween](#markdown-header-customizing-tween) | `object` | `null`
-
-#### Customizing Tween
-
-Both the `childTween` and `parentTween` objects take the same customization options listed below
-
-| Option | Description | Type | Default
-| --- | --- | --- | --- |
-| `outDuration` | The tween duration when animating the current menu out | `function`  | `0.2`
-| `outEase` | The tween ease when animating the current menu out | `function`  | `'power1.out'`
-| `outStagger` | The tween stagger when animating the current menu out | `number` | `0` |
-| `inDuration` | The tween duration when animating the new menu in | `number` | `0.2` |
-| `inEase` | The tween ease when animating the new menu in | `string` | `'power1.out'` |
-| `inStagger` | The tween stagger when animating the new menu in | `number` | `0.1` |
-| `heightDuration` | The tween duration when animating the height of the drilldown menu | `number` | `0.3` |
-| `heightEase` | The tween ease when animating the height of the drilldown menu | `string` | `'power1.out'` |
-| `onStart` | Function to be called when the animation starts | `function` | `null` |
-| `onComplete` | Function to be called when the animation completes | `function` | `null` |
-
-#### Example
-```JS
-const drilldownInstance = new Drilldown(context, {
-  // tween specific options
-  childTween: {
-    outDuration: 0.2,
-    outEase: 'power1.out',
-    outStagger: 0,
-    inDuration: 0.2,
-    inEase: 'power1.out',
-    inStagger: 0.1,
-    heightDuration: 0.3,
-    heightEase: 'power1.out',
-    onStart: () => {
-      console.log('current menu exiting');
-    },
-    onComplete: () => {
-      console.log('child menu entered');
-    }
-  },
-  parentTween: {
-    outDuration: 0.2,
-    outEase: 'power1.out',
-    outStagger: 0,
-    inDuration: 0.2,
-    inEase: 'power1.out',
-    inStagger: 0.1,
-    heightDuration: 0.3,
-    heightEase: 'power1.out',
-    onStart: () => {
-      console.log('current menu exiting');
-    },
-    onComplete: () => {
-      console.log('parent menu entered');
-    }
-  }
-```
-### Methods
-
-| Method | Description
-| --- | --- |
-| `init()` | Initalise the drilldown |
-| `reset()` | Resets the drilldown menu to its initial state. |
-| `destroy()` | Destroys drilldown. Cleans up event listeners and resets the menu. |
-
 
 ## Release notes
 
