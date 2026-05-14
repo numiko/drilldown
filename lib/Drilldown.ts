@@ -258,7 +258,7 @@ class Drilldown {
    * @param menu
    */
   private getMenuListItems(menu: HTMLElement): HTMLElement[] {
-    const childMenu = Array.from(menu.children).filter((item) => (item as HTMLElement).matches('ul'))[0] as HTMLElement;
+    const childMenu = menu.querySelector<HTMLElement>('[data-js-menu-list]');
 
     if (!childMenu) return [];
 

@@ -59,7 +59,7 @@ menu.init();
 
 ```HTML
 <div id="menu" class="overflow-hidden bg-black text-white relative top-full left-0 w-full" data-js-menu-container data-js-menu-container-level="0" aria-hidden="false">
-  <ul class="flex flex-col">
+  <ul class="flex flex-col" data-js-menu-list>
     <li data-js-menu-item data-js-menu-item-level="0">
       <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="1">
       <span>Top level 1</span>
@@ -76,7 +76,7 @@ menu.init();
             <div>
               <a class="flex w-full text-left items-center justify-between px-9 py-7 group" data-js-menu-parent href="http://www.example.com">Top level 2</a>
             </div>
-            <ul class="flex flex-col">
+            <ul class="flex flex-col" data-js-menu-list>
               <li data-js-menu-item data-js-menu-item-level="1">
                   <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="1">
                   <span>Second level 1</span>
@@ -93,7 +93,7 @@ menu.init();
                   <div>
                       <a class="flex w-full text-left items-center justify-between px-9 py-7 group" data-js-menu-parent href="http://www.example.com">Second level 2</a>
                   </div>
-                  <ul class="flex flex-col">
+                  <ul class="flex flex-col" data-js-menu-list>
                       <li data-js-menu-item data-js-menu-item-level="2">
                         <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="2">
                         <span>Third level 1</span>
