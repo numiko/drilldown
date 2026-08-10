@@ -62,6 +62,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 describe('Drilldown initialisation', () => {
@@ -419,26 +420,23 @@ describe('When the menu is resized', () => {
     */
     const heightOfResizedMenu = '400px';
 
-    // We mock the implementation of the Resize Observer because `happy-dom`, whilst
-    // mocking this itself, doesn't provide the necessary functionality to test the
-    // ResizeObserver callback.
-    vi.spyOn(global, 'ResizeObserver').mockImplementation((callback) => {
-      callback(
-        [
-          {
-            target: {
-              offsetHeight: parseInt(heightOfResizedMenu),
+    vi.stubGlobal('ResizeObserver', class {
+      constructor(callback) {
+        callback(
+          [
+            {
+              target: {
+                offsetHeight: parseInt(heightOfResizedMenu),
+              },
             },
-          },
-        ],
-        this
-      );
+          ],
+          this
+        );
+      }
 
-      return {
-        observe: vi.fn(),
-        unobserve: vi.fn(),
-        disconnect: vi.fn()
-      };
+      observe = vi.fn();
+      unobserve = vi.fn();
+      disconnect = vi.fn();
     });
 
     const menu = document.getElementById('menu');
