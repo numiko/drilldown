@@ -1,6 +1,6 @@
 {
   "name": "@numiko/drilldown",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A package to create a menu system enabling you to drilldown to deeper levels and navigate back up",
   "author": "Numiko",
   "private": false,
