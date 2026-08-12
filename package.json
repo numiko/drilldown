@@ -19,7 +19,7 @@
     "test:coverage": "vitest --coverage",
     "test:ci": "vitest --run --reporter junit --outputFile ./reports/results.xml --coverage.enabled --coverage.include lib --coverage.reporter=html --coverage.reportsDirectory ./reports/",
     "generate-docs": "typedoc lib/Drilldown.ts",
-    "deploy-docs": "netlify deploy --dir=docs --alias=v$(node -p \"require('./package.json').version\")",
+    "deploy-docs": "netlify deploy --dir=docs --site=467fdb4d-12eb-495b-8e48-aeb9a346343c --alias=v$(node -p \"require('./package.json').version\") && netlify deploy --dir=docs --site=467fdb4d-12eb-495b-8e48-aeb9a346343c --prod",
     "release": "echo 'Releasing package. Ensure the module is linked to the Netlify project using `netlify link`.'; release-it release"
   },
   "main": "./dist/Drilldown.umd.js",
