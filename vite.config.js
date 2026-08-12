@@ -27,7 +27,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'lib/Drilldown.ts'),
+      entry: path.resolve(import.meta.dirname, 'lib/Drilldown.ts'),
       name: 'Drilldown',
       fileName: (format) => `Drilldown.${format}.js`
     },
