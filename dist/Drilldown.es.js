@@ -1,5 +1,5 @@
 import { gsap as e } from "gsap";
-//#region lib/Drilldown.ts
+// lib/Drilldown.ts
 var t = .2, n = "power1.out", r = class {
 	constructor(r, i = {}) {
 		this.activeMenuItem = null, this.menuResizeObserver = null, this.isAnimating = !1, this.handleMenuClick = (e) => {
@@ -175,5 +175,4 @@ var t = .2, n = "power1.out", r = class {
 		this.context.removeEventListener("click", this.handleMenuClick), this.reset();
 	}
 };
-//#endregion
 export { r as Drilldown };
