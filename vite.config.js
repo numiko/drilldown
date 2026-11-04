@@ -33,7 +33,7 @@ export default defineConfig({
       name: 'Drilldown',
       fileName: (format) => `Drilldown.${format}.js`
     },
-    rollupOptions: {
+    rolldownOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
       external: ['gsap'],
