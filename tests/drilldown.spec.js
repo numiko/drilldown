@@ -9,7 +9,7 @@ async function delay(ms) {
 // Read the HTML document content
 const htmlDocumentContent = `
   <div id="menu" class="overflow-hidden bg-black text-white relative top-full left-0 w-full" data-js-menu-container data-js-menu-container-level="0" aria-hidden="false">
-    <ul class="flex flex-col">
+    <ul class="flex flex-col" data-js-menu-list>
       <li data-js-menu-item data-js-menu-item-level="0">
         <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="0">
           <span>Top level 1</span>
@@ -26,7 +26,7 @@ const htmlDocumentContent = `
           <div>
             <a class="flex w-full text-left items-center justify-between px-9 py-7 group" data-js-menu-parent href="http://www.example.com">Top level 2</a>
           </div>
-          <ul class="flex flex-col">
+          <ul class="flex flex-col" data-js-menu-list>
             <li data-js-menu-item data-js-menu-item-level="1">
               <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="1">
                 <span>Second level 1</span>
@@ -43,7 +43,7 @@ const htmlDocumentContent = `
                 <div>
                   <a class="flex w-full text-left items-center justify-between px-9 py-7 group" data-js-menu-parent href="http://www.example.com">Second level 2</a>
                 </div>
-                <ul class="flex flex-col">
+                <ul class="flex flex-col" data-js-menu-list>
                   <li data-js-menu-item data-js-menu-item-level="2">
                     <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="2">
                       <span>Third level 1</span>
@@ -532,5 +532,57 @@ describe('When the back button is not the first element in a submenu', () => {
     expect(ownBackButton.style.opacity).toBe('0');
     expect(ownBackButton.style.visibility).toBe('hidden');
     expect(nestedBackButton.getAttribute('style')).toBe(null);
+  });
+});
+
+describe('Finding each menu\'s list', () => {
+  const fastTweens = {
+    childTweenOptions: { inDuration: 0.01, outDuration: 0.01 },
+    parentTweenOptions: { inDuration: 0.01, outDuration: 0.01 },
+  };
+
+  const topLevelItem = () => document.querySelector('[data-js-menu-item-level="0"]');
+  const secondLevelItems = () => Array.from(document.querySelectorAll('[data-js-menu-item-level="1"]'));
+
+  async function openFirstSubmenu() {
+    const drilldown = new Drilldown(document.getElementById('menu'), fastTweens);
+    drilldown.init();
+
+    document.querySelector('[aria-controls="menu_1"]').click();
+    await delay(250);
+  }
+
+  it('should fall back to the first child `ul` when `data-js-menu-list` is not used', async () => {
+    document.querySelectorAll('[data-js-menu-list]').forEach((list) => list.removeAttribute('data-js-menu-list'));
+
+    await openFirstSubmenu();
+
+    expect(topLevelItem().classList.contains('hidden')).toBe(true);
+    secondLevelItems().forEach((item) => {
+      const link = item.querySelector('[data-js-menu-link]');
+      expect(link.style.opacity).toBe('1');
+    });
+  });
+
+  it('should find a `data-js-menu-list` that is not a direct child of the menu', async () => {
+    const menu = document.getElementById('menu');
+    const wrapper = document.createElement('div');
+    wrapper.append(menu.querySelector(':scope > [data-js-menu-list]'));
+    menu.append(wrapper);
+
+    await openFirstSubmenu();
+
+    expect(topLevelItem().classList.contains('hidden')).toBe(true);
+  });
+
+  it('should not use a nested submenu\'s list when the menu\'s own list has no `data-js-menu-list`', async () => {
+    document.querySelector('#menu > [data-js-menu-list]').removeAttribute('data-js-menu-list');
+
+    await openFirstSubmenu();
+
+    expect(topLevelItem().classList.contains('hidden')).toBe(true);
+    secondLevelItems().forEach((item) => {
+      expect(item.classList.contains('hidden')).toBe(false);
+    });
   });
 });
