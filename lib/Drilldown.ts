@@ -268,18 +268,29 @@ class Drilldown {
   }
 
   /**
-   * Returns the elements that will be hidden when a menu is transitioning.
+   * Finds this menu's own back button (or parent link) - not one belonging to a nested
+   * submenu - regardless of where it sits in the markup.
+   * @param menu - The menu we want the element for.
+   * @param selector - Selector for the back button or parent link.
+   */
+  private findOwnMenuElement(menu: HTMLElement, selector: string): HTMLElement | null {
+    const matches = Array.from(menu.querySelectorAll<HTMLElement>(selector));
+    return matches.find((match) => match.closest(this.options.submenuSelector) === menu) ?? null;
+  }
+
+  /**
+   * Returns the elements that fade in/out when a menu transitions: the back button, the
+   * parent link, and each item's link. The root menu has no back button or parent link, so
+   * any missing elements are filtered out before returning.
    * @param menu
    */
-  private getElementsToHideForMenuTransition(menu: HTMLElement): (HTMLElement | null)[] {
+  private getElementsToHideForMenuTransition(menu: HTMLElement): HTMLElement[] {
     const menuItems = this.getMenuListItems(menu);
     const menuItemLinks = menuItems.map((item) => item.querySelector<HTMLElement>('[data-js-menu-link]'));
 
-    const backButton = menu.querySelector<HTMLElement>(this.options.backSelector);
-    const parentLink = menu.querySelector<HTMLElement>('[data-js-menu-parent]');
-    const combinedMenuItems = [backButton, parentLink, ...menuItemLinks];
-
-    return combinedMenuItems;
+    const backButton = this.findOwnMenuElement(menu, this.options.backSelector);
+    const parentLink = this.findOwnMenuElement(menu, '[data-js-menu-parent]');
+    return [backButton, parentLink, ...menuItemLinks].filter((element): element is HTMLElement => element !== null);
   }
 
   /**
