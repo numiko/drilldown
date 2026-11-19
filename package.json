@@ -4,11 +4,14 @@
   "description": "A package to create a menu system enabling you to drilldown to deeper levels and navigate back up",
   "author": "Numiko",
   "private": false,
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/numiko/drilldown#readme",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/numiko/drilldown.git"
+    "url": "git+https://github.com/numiko/drilldown.git"
+  },
+  "homepage": "https://github.com/numiko/drilldown#readme",
+  "bugs": {
+    "url": "https://github.com/numiko/drilldown/issues"
   },
   "type": "module",
   "engines": {
