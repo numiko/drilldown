@@ -98,16 +98,19 @@ var t = .2, n = "power1.out", r = class {
 		}), this.menuResizeObserver;
 	}
 	getMenuListItems(e) {
-		let t = Array.from(e.children).filter((e) => e.matches("ul"))[0];
+		let t = this.findOwnMenuElement(e, "[data-js-menu-list]") ?? Array.from(e.children).find((e) => e.matches("ul")) ?? null;
 		return t ? Array.from(t.children).filter((e) => e.matches(this.options.itemSelector)) : [];
+	}
+	findOwnMenuElement(e, t) {
+		return Array.from(e.querySelectorAll(t)).find((t) => t.closest(this.options.submenuSelector) === e) ?? null;
 	}
 	getElementsToHideForMenuTransition(e) {
 		let t = this.getMenuListItems(e).map((e) => e.querySelector("[data-js-menu-link]"));
 		return [
-			e.querySelector(this.options.backSelector),
-			e.querySelector("[data-js-menu-parent]"),
+			this.findOwnMenuElement(e, this.options.backSelector),
+			this.findOwnMenuElement(e, "[data-js-menu-parent]"),
 			...t
-		];
+		].filter((e) => e !== null);
 	}
 	onShowChildStart(e, t) {
 		e.scrollTop = 0, t.scrollTop = 0, this.isAnimating = !0;

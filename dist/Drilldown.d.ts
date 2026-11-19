@@ -106,11 +106,23 @@ declare class Drilldown {
     /**
      * Returns the main list items for a given menu. It does not include supplementary items, for
      * example, the parent link or the back button.
+     *
+     * The list is the menu's own `[data-js-menu-list]` element. Markup without that attribute
+     * falls back to the menu's first direct child `ul`, so existing 2.x markup keeps working.
      * @param menu
      */
     private getMenuListItems;
     /**
-     * Returns the elements that will be hidden when a menu is transitioning.
+     * Finds this menu's own element (for example its back button, parent link or list) - not one
+     * belonging to a nested submenu - regardless of where it sits in the markup.
+     * @param menu - The menu we want the element for.
+     * @param selector - Selector for the element.
+     */
+    private findOwnMenuElement;
+    /**
+     * Returns the elements that fade in/out when a menu transitions: the back button, the
+     * parent link, and each item's link. The root menu has no back button or parent link, so
+     * any missing elements are filtered out before returning.
      * @param menu
      */
     private getElementsToHideForMenuTransition;
