@@ -534,3 +534,55 @@ describe('When the back button is not the first element in a submenu', () => {
     expect(nestedBackButton.getAttribute('style')).toBe(null);
   });
 });
+
+describe('Finding each menu\'s list', () => {
+  const fastTweens = {
+    childTweenOptions: { inDuration: 0.01, outDuration: 0.01 },
+    parentTweenOptions: { inDuration: 0.01, outDuration: 0.01 },
+  };
+
+  const topLevelItem = () => document.querySelector('[data-js-menu-item-level="0"]');
+  const secondLevelItems = () => Array.from(document.querySelectorAll('[data-js-menu-item-level="1"]'));
+
+  async function openFirstSubmenu() {
+    const drilldown = new Drilldown(document.getElementById('menu'), fastTweens);
+    drilldown.init();
+
+    document.querySelector('[aria-controls="menu_1"]').click();
+    await delay(250);
+  }
+
+  it('should fall back to the first child `ul` when `data-js-menu-list` is not used', async () => {
+    document.querySelectorAll('[data-js-menu-list]').forEach((list) => list.removeAttribute('data-js-menu-list'));
+
+    await openFirstSubmenu();
+
+    expect(topLevelItem().classList.contains('hidden')).toBe(true);
+    secondLevelItems().forEach((item) => {
+      const link = item.querySelector('[data-js-menu-link]');
+      expect(link.style.opacity).toBe('1');
+    });
+  });
+
+  it('should find a `data-js-menu-list` that is not a direct child of the menu', async () => {
+    const menu = document.getElementById('menu');
+    const wrapper = document.createElement('div');
+    wrapper.append(menu.querySelector(':scope > [data-js-menu-list]'));
+    menu.append(wrapper);
+
+    await openFirstSubmenu();
+
+    expect(topLevelItem().classList.contains('hidden')).toBe(true);
+  });
+
+  it('should not use a nested submenu\'s list when the menu\'s own list has no `data-js-menu-list`', async () => {
+    document.querySelector('#menu > [data-js-menu-list]').removeAttribute('data-js-menu-list');
+
+    await openFirstSubmenu();
+
+    expect(topLevelItem().classList.contains('hidden')).toBe(true);
+    secondLevelItems().forEach((item) => {
+      expect(item.classList.contains('hidden')).toBe(false);
+    });
+  });
+});

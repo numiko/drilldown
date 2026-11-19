@@ -255,10 +255,15 @@ class Drilldown {
   /**
    * Returns the main list items for a given menu. It does not include supplementary items, for
    * example, the parent link or the back button.
+   *
+   * The list is the menu's own `[data-js-menu-list]` element. Markup without that attribute
+   * falls back to the menu's first direct child `ul`, so existing 2.x markup keeps working.
    * @param menu
    */
   private getMenuListItems(menu: HTMLElement): HTMLElement[] {
-    const childMenu = menu.querySelector<HTMLElement>('[data-js-menu-list]');
+    const childMenu = this.findOwnMenuElement(menu, '[data-js-menu-list]')
+      ?? Array.from(menu.children).find((child): child is HTMLElement => child.matches('ul'))
+      ?? null;
 
     if (!childMenu) return [];
 
@@ -268,10 +273,10 @@ class Drilldown {
   }
 
   /**
-   * Finds this menu's own back button (or parent link) - not one belonging to a nested
-   * submenu - regardless of where it sits in the markup.
+   * Finds this menu's own element (for example its back button, parent link or list) - not one
+   * belonging to a nested submenu - regardless of where it sits in the markup.
    * @param menu - The menu we want the element for.
-   * @param selector - Selector for the back button or parent link.
+   * @param selector - Selector for the element.
    */
   private findOwnMenuElement(menu: HTMLElement, selector: string): HTMLElement | null {
     const matches = Array.from(menu.querySelectorAll<HTMLElement>(selector));
