@@ -33,6 +33,26 @@ const htmlDocumentContent = `
               </a>
             </li>
             <li data-js-menu-item data-js-menu-item-level="1">
+              <button class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" type="button" data-js-menu-link data-js-menu-link-level="1" data-js-menu-next aria-controls="menu_2">
+                <span>Second level 2</span>
+              </button>
+              <div id="menu_2" class="invisible absolute z-10 w-full top-0" data-js-menu-container data-js-menu-container-level="2">
+                <button class="flex gap-4 w-full text-left items-center justify-start px-9 py-7 group" data-js-menu-back>
+                  <span>Go back</span>
+                </button>
+                <div>
+                  <a class="flex w-full text-left items-center justify-between px-9 py-7 group" data-js-menu-parent href="http://www.example.com">Second level 2</a>
+                </div>
+                <ul class="flex flex-col">
+                  <li data-js-menu-item data-js-menu-item-level="2">
+                    <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="2">
+                      <span>Third level 1</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li data-js-menu-item data-js-menu-item-level="1">
               <a class="flex gap-4 w-full text-left items-center justify-between px-9 py-7 group" href="http://www.example.com" data-js-menu-link data-js-menu-link-level="1">
                 <span>Second level 3</span>
               </a>
@@ -460,5 +480,57 @@ describe('When the menu is resized', () => {
     await delay(250);
 
     expect(menu.style.height).toBe(heightOfResizedMenu);
+  });
+});
+
+describe('When the back button is not the first element in a submenu', () => {
+  const fastTweens = {
+    childTweenOptions: { inDuration: 0.01, outDuration: 0.01 },
+    parentTweenOptions: { inDuration: 0.01, outDuration: 0.01 },
+  };
+
+  let ownBackButton;
+  let nestedBackButton;
+  let nestedParentLink;
+
+  beforeEach(() => {
+    // Move the level 1 back button after its list, so the nested level 2 menu's back button
+    // and parent link now come before it in the markup.
+    const submenu = document.getElementById('menu_1');
+    ownBackButton = submenu.querySelector(':scope > [data-js-menu-back]');
+    submenu.append(ownBackButton);
+
+    nestedBackButton = document.querySelector('#menu_2 [data-js-menu-back]');
+    nestedParentLink = document.querySelector('#menu_2 [data-js-menu-parent]');
+  });
+
+  it('should animate in the submenu\'s own back button and leave nested ones untouched', async () => {
+    const drilldown = new Drilldown(document.getElementById('menu'), fastTweens);
+    drilldown.init();
+
+    document.querySelector('[aria-controls="menu_1"]').click();
+    await delay(250);
+
+    expect(ownBackButton.style.opacity).toBe('1');
+    expect(ownBackButton.style.visibility).toBe('inherit');
+
+    // These belong to the level 2 menu, which has not been opened.
+    expect(nestedBackButton.getAttribute('style')).toBe(null);
+    expect(nestedParentLink.getAttribute('style')).toBe(null);
+  });
+
+  it('should animate out the submenu\'s own back button when going back', async () => {
+    const drilldown = new Drilldown(document.getElementById('menu'), fastTweens);
+    drilldown.init();
+
+    document.querySelector('[aria-controls="menu_1"]').click();
+    await delay(250);
+
+    ownBackButton.click();
+    await delay(250);
+
+    expect(ownBackButton.style.opacity).toBe('0');
+    expect(ownBackButton.style.visibility).toBe('hidden');
+    expect(nestedBackButton.getAttribute('style')).toBe(null);
   });
 });
