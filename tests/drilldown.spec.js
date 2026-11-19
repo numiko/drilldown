@@ -462,3 +462,83 @@ describe('When the menu is resized', () => {
     expect(menu.style.height).toBe(heightOfResizedMenu);
   });
 });
+
+describe('When the back button is not the first element in a submenu', () => {
+  // The level 1 back button sits after the list, so the nested level 2 menu (and its
+  // back button and parent link) come before it in the markup.
+  const backButtonAfterListMarkup = `
+    <div id="menu" data-js-menu-container data-js-menu-container-level="0">
+      <ul>
+        <li data-js-menu-item data-js-menu-item-level="0">
+          <a href="http://www.example.com" data-js-menu-link data-js-menu-link-level="0">Top level 1</a>
+        </li>
+        <li data-js-menu-item data-js-menu-item-level="0">
+          <button type="button" data-js-menu-link data-js-menu-link-level="0" data-js-menu-next>Top level 2</button>
+          <div data-js-menu-container data-js-menu-container-level="1">
+            <div>
+              <a href="http://www.example.com" data-js-menu-parent data-js-menu-parent-level="1">Top level 2</a>
+            </div>
+            <ul>
+              <li data-js-menu-item data-js-menu-item-level="1">
+                <button type="button" data-js-menu-link data-js-menu-link-level="1" data-js-menu-next>Second level 1</button>
+                <div data-js-menu-container data-js-menu-container-level="2">
+                  <div>
+                    <a href="http://www.example.com" data-js-menu-parent data-js-menu-parent-level="2">Second level 1</a>
+                  </div>
+                  <button type="button" data-js-menu-back data-js-menu-back-level="2">Go back</button>
+                  <ul>
+                    <li data-js-menu-item data-js-menu-item-level="2">
+                      <a href="http://www.example.com" data-js-menu-link data-js-menu-link-level="2">Third level 1</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+            <button type="button" data-js-menu-back data-js-menu-back-level="1">Go back</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  `;
+
+  const fastTweens = {
+    childTweenOptions: { inDuration: 0.01, outDuration: 0.01 },
+    parentTweenOptions: { inDuration: 0.01, outDuration: 0.01 },
+  };
+
+  beforeEach(() => {
+    document.body.innerHTML = backButtonAfterListMarkup;
+  });
+
+  it('should animate in the submenu\'s own back button and leave nested ones untouched', async () => {
+    const drilldown = new Drilldown(document.getElementById('menu'), fastTweens);
+    drilldown.init();
+
+    document.querySelector('[data-js-menu-next]').click();
+    await delay(250);
+
+    const ownBackButton = document.querySelector('[data-js-menu-back-level="1"]');
+    expect(ownBackButton.style.opacity).toBe('1');
+    expect(ownBackButton.style.visibility).toBe('inherit');
+
+    // The level 2 back button and parent link belong to a menu that has not been opened.
+    expect(document.querySelector('[data-js-menu-back-level="2"]').getAttribute('style')).toBe(null);
+    expect(document.querySelector('[data-js-menu-parent-level="2"]').getAttribute('style')).toBe(null);
+  });
+
+  it('should animate out the submenu\'s own back button when going back', async () => {
+    const drilldown = new Drilldown(document.getElementById('menu'), fastTweens);
+    drilldown.init();
+
+    document.querySelector('[data-js-menu-next]').click();
+    await delay(250);
+
+    const ownBackButton = document.querySelector('[data-js-menu-back-level="1"]');
+    ownBackButton.click();
+    await delay(250);
+
+    expect(ownBackButton.style.opacity).toBe('0');
+    expect(ownBackButton.style.visibility).toBe('hidden');
+    expect(document.querySelector('[data-js-menu-back-level="2"]').getAttribute('style')).toBe(null);
+  });
+});
